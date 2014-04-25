@@ -15,7 +15,7 @@ angular.module('sbApp.directives', []).
             restrict: 'A',
             template: '<pre ng-show="debug">Model: {{selected.key | json}} Value : {{ selected.value | json}} opened : {{ opened }}</pre>'+
                       '<div class="VS-search">'+
-                        '<div class="VS-search-box-wrapper VS-search-box" >'+
+                        '<div class="VS-search-box-wrapper VS-search-box form-control" >'+
                         '<div class="VS-icon VS-icon-search"></div>'+
                         '<div class="VS-placeholder"></div>'+
                         '<div class="VS-search-inner">'+
