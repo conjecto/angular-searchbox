@@ -2,8 +2,4 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('sbApp', [
-  'sbApp.directives',
-  'ui.bootstrap',
-  'ui'
-]);
+angular.module('sbApp', ['angularjssearchbox']);

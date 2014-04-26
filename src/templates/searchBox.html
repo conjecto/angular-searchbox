@@ -1,0 +1,30 @@
+<pre ng-show="debug">Model: {{selected.key | json}} Value : {{ selected.value | json}} opened : {{ opened }}</pre>
+<div class="VS-search">
+    <div class="VS-search-box-wrapper VS-search-box form-control">
+        <div class="VS-icon VS-icon-search"></div>
+        <div class="VS-placeholder"></div>
+        <div class="VS-search-inner">
+            <div class="search_parameter" ng-class="{ selected : $index == selectedResult }"
+                 ng-repeat="parameter in resultList" ng-click="selectResult($index)">
+                <div class="search_parameter_remove VS-icon VS-icon-cancel" ng-click="removeFilter($index)"></div>
+                <div class="key">{{ parameter.key }}</div>
+                <div class="value" ng-if="parameter.value != null" ng-click="removeValue($index)">{{ parameter.value }} </div>
+                <input type="text" ui-keypress="{enter : 'onFreeSelectValue($index,$model)'}"
+                       ng-model="selected.value"
+                       ng-if="parameter.value == null && (parameter.type == null || parameter.type == 'string')"
+                       class="form-control" typeahead-on-select="onSelectValue($index, $model)"
+                       typeahead="element.name as element.name + ' (' +element.count+')' for element in getValues(parameter.key) | filter:{name:$viewValue} | limitTo:8"
+                       class="form-control" sb-focus><input type="text"
+                                                            ui-keypress="{enter : 'onFreeSelectValue($index,$model)'}"
+                                                            ng-model="selected.value"
+                                                            ng-if="parameter.value == null && parameter.type == 'date'"
+                                                            class="form-control" datepicker-popup="dd-MM-yyyy"
+                                                            is-open="opened" current-text="Aujourd'huis"
+                                                            clear-text="Effacer" close-text="Fermer" sb-focus></div>
+            <input input-facet type="text" ui-keypress="{enter : 'onFreeSelect($model)'}" ng-model="selected.key"
+                   data-min-length="0" typeahead-on-select="onSelect($model)"
+                   typeahead="element as element.label for element in facetList | filter:{label:$viewValue}"
+                   class="form-control input-facet"></div>
+        <div class="VS-icon VS-icon-cancel VS-cancel-search-box" title="clear search" ng-click="removeAll()"></div>
+    </div>
+</div>
