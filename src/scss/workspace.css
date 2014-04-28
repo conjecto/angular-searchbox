@@ -23,7 +23,7 @@
     background: transparent;
     font-size: 16px;
     line-height: 20px;
-    width: 100%;
+    min-width:20px;
 }
 .VS-interface, .VS-search .dialog, .VS-search input {
 
@@ -64,18 +64,20 @@
     float: left;
     color: #808080;
 
-    width:auto;
+
 }
 .VS-search.VS-focus input {
     color: #606060;
 }
 .VS-search .VS-icon-search {
     position: absolute;
-    left: 9px; top: 15px;
+    left: 9px; top: 13px;
+    font-size:0.9em;
 }
 .VS-search .VS-icon-cancel {
     position: absolute;
-    right: 9px; top: 15px;
+    right: 9px; top: 12px;
+    font-size:1.1em;
 }
 
 /* ================ */
@@ -90,7 +92,7 @@
     border: 1px solid transparent;
     height: 35px;
     cursor: pointer;
-    line-height: 30px;
+    line-height: 34px;
 }
 .VS-search .search_parameter.selected {
     -webkit-border-radius: 4px;
@@ -134,17 +136,19 @@
 }
 .VS-search .search_parameter .search_parameter_remove {
     position: absolute;
-    left: 2px;
-    top: 10px;
+    font-size: 0.8em;
+    left: 4px;
+    top: 1px;
 }
 .VS-search .search_parameter.is_selected .search_parameter_remove {
     opacity: 0.4;
     left: 3px;
     filter: alpha(opacity=40);
-    background-position: center -11px;
+    color: #ba0909;
 }
 .VS-search .search_parameter .search_parameter_remove:hover {
     opacity: 1;
+    color:#ba0909;
 }
 .VS-search .search_parameter.is_editing .key,
 .VS-search .search_parameter.is_selected .key {
@@ -237,4 +241,13 @@
 .VS-interface.ui-autocomplete li {
     list-style: none;
     width: auto;
+}
+
+.value{
+    position:relative;
+    min-width:40px;
+}
+
+.input-facet{
+    min-width:40px;
 }
