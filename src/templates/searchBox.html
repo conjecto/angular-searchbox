@@ -18,6 +18,7 @@
                        data-min-length="0"
                        style="position:absolute;z-index:2;width:100%;font-size:1em;top:0px;"
                        value="{{ parameter.value }}"
+                       data-container="body"
                        ng-options="element.name as element.name + ' (' +element.count+')' for element in getValues(parameter.key) | filter:{name:$viewValue}"
                        sb-focus bs-typeahead>
                 <input type="text"
@@ -25,6 +26,7 @@
                        ng-if="parameter.type == 'date'"
                        class="form-control"
                        data-date-format="dd-MM-yyyy"
+                       data-container="body"
                        style="position:absolute;z-index:2;width:100%;font-size:1em;top:0px;"
                        data-autoclose="1"
                        bs-datepicker
@@ -40,6 +42,8 @@
                    data-limit="8"
                    data-trigger="focus"
                    data-animation="am-flip-x"
+                   data-container="body"
+                   data-delay="{ show: 500, hide: 0 }"
                    ng-options="element as element.label for element in facetList | filter:{label:$viewValue}"
                    class="form-control input-facet" bs-typeahead>
             </div>
