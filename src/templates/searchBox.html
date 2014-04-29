@@ -5,7 +5,8 @@
         <div class="VS-placeholder"></div>
         <div class="VS-search-inner">
             <div class="search_parameter" ng-class="{ selected : $index == selectedResult }"
-                 ng-repeat="parameter in resultList" ng-click="selectResult($index)">
+                 ng-repeat="parameter in sbResultList" ng-click="selectResult($index)"
+                 repeat-done="test()">
                 <div class="search_parameter_remove VS-icon VS-icon-cancel" ng-click="removeFilter($index)"><span class="glyphicon glyphicon-remove"></span></div>
                 <div class="key">{{ parameter.key }}</div>
                 <div class="value" ><span style="position:relative;z-index:1;display:inline-block;visibility: hidden;" >{{ parameter.value }}</span>
@@ -21,9 +22,10 @@
                        sb-focus bs-typeahead>
                 <input type="text"
                        ng-model="parameter.value"
-                       ng-if="parameter.value == '' && parameter.type == 'date'"
+                       ng-if="parameter.type == 'date'"
                        class="form-control"
                        data-date-format="dd-MM-yyyy"
+                       style="position:absolute;z-index:2;width:100%;font-size:1em;top:0px;"
                        data-autoclose="1"
                        bs-datepicker
                        sb-focus>
@@ -33,11 +35,12 @@
             <div class="search_parameter">
             <input input-facet
                    data-min-length="0"
-                   type="text" ng-model="selected.key"
+                   type="text"
+                   ng-model="selected.key"
                    data-limit="8"
                    data-trigger="focus"
                    data-animation="am-flip-x"
-                   ng-options="element as element.label for element in facetList | filter:{label:$viewValue} "
+                   ng-options="element as element.label for element in facetList | filter:{label:$viewValue}"
                    class="form-control input-facet" bs-typeahead>
             </div>
         </div>

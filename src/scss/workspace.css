@@ -132,7 +132,7 @@
 .VS-search .search_parameter input{
     margin: 0;
     padding: 0;
-    color: #000;
+
 }
 .VS-search .search_parameter .search_parameter_remove {
     position: absolute;
@@ -152,11 +152,11 @@
 }
 .VS-search .search_parameter.is_editing .key,
 .VS-search .search_parameter.is_selected .key {
-    color: #000;
+
 }
 
-.VS-icon-cancel:hover ~ div {
-    color: darkred !important;
+.VS-icon-cancel:hover ~ div, .VS-icon-cancel:hover ~ div input  {
+    color: #ba0909!important;
 }
 
 /* ================ */
