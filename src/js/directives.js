@@ -92,9 +92,11 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
                                         }
                                     });
                                 }
-                                scope.resultList = scope.sbResultList.slice(0);
-                                elem.find('input')[elem.find('input').length-1].focus();
-                                scope.selectedResult = null;
+                                scope.$apply(function () {
+                                    scope.resultList = scope.sbResultList.slice(0);
+                                    elem.find('input')[elem.find('input').length-1].focus();
+                                    scope.selectedResult = null;
+                                });
                             }
                         });
                     });
