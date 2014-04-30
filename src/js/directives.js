@@ -2,7 +2,7 @@
 
 /* Directives */
 
-angular.module('angularjssearchbox', ['ngAnimate','mgcrea.ngStrap.typeahead', 'mgcrea.ngStrap.datepicker']).
+angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStrap.datepicker']).
    directive('sbFocus', ['$timeout', function($timeout){
         return function(scope, element){
             $timeout(function() {
@@ -98,6 +98,14 @@ angular.module('angularjssearchbox', ['ngAnimate','mgcrea.ngStrap.typeahead', 'm
                             }
                         });
                     });
+                }
+
+                scope.getFacetLabel = function(key){
+                    for (var facet in scope.facetList){
+                        if(scope.facetList[facet].name == key)
+                            return scope.facetList[facet].label ;
+                    }
+                    return key;
                 }
 
                 scope.getValues = function (key){

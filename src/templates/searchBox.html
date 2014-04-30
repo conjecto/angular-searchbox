@@ -8,7 +8,7 @@
                  ng-repeat="parameter in sbResultList" ng-click="selectResult($index)"
                  repeat-done="test()">
                 <div class="search_parameter_remove VS-icon VS-icon-cancel" ng-click="removeFilter($index)"><span class="glyphicon glyphicon-remove"></span></div>
-                <div class="key">{{ parameter.key }}</div>
+                <div class="key">{{ getFacetLabel(parameter.key) }}</div>
                 <div class="value" ><span style="position:relative;z-index:1;display:inline-block;visibility: hidden;" >{{ parameter.value }}</span>
                 <input type="text"
                        ng-model="parameter.value"
@@ -41,7 +41,6 @@
                    ng-model="selected.key"
                    data-limit="8"
                    data-trigger="focus"
-                   data-animation="am-flip-x"
                    data-container="body"
                    data-delay="{ show: 500, hide: 0 }"
                    ng-options="element as element.label for element in facetList | filter:{label:$viewValue}"
