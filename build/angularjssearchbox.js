@@ -2,12 +2,20 @@
 
 /* Directives */
 
-angular.module('angularjssearchbox', ['ui.bootstrap', 'ui']).
-   directive('sbFocus', function(){
+angular.module('angularjssearchbox', ['ngAnimate','mgcrea.ngStrap.typeahead', 'mgcrea.ngStrap.datepicker']).
+   directive('sbFocus', ['$timeout', function($timeout){
         return function(scope, element){
-            element[0].focus();
-            scope.opened = true;
+            $timeout(function() {
+                if(!scope.useKeywordFacet){
+                    element[0].focus();
+                }
+            });
         };
+   }]).
+   directive('repeatDone', function() {
+     return function(scope, element, attrs) {
+             scope.bindValueInput(element);
+     }
    }).
    directive('searchBox', ['$timeout', function($timeout) {
         return {
@@ -20,9 +28,77 @@ angular.module('angularjssearchbox', ['ui.bootstrap', 'ui']).
             },
             link: function(scope, elem, attrs){
 
-                scope.selected = {key:null, value:null};
+                scope.selected = {key:"", value:""};
                 scope.selectedResult = null;
                 scope.debug = scope.debug || false;
+                scope.useKeywordFacet = false;
+                scope.hasKeywordFacet = false;
+                scope.sbResultList = scope.resultList.slice(0);
+
+                var HOT_KEYS = [9, 13, 37, 39];
+
+                //bind keyboard events: enter(13) and tab(9) on Facet Input
+                elem.find('input').bind('keydown', function (evt) {
+
+                    if (HOT_KEYS.indexOf(evt.which) === -1) {
+                        return;
+                    }
+
+                    evt.preventDefault();
+
+                    if (evt.which === 13) {
+                        scope.useKeywordFacet = true;
+                        $timeout(function () {
+                            if(scope.useKeywordFacet)
+                            {
+                                scope.selected.value = "" ;
+                                if(scope.hasKeywordFacet){
+                                    scope.sbResultList[scope.sbResultList.length-1].value +=" " + scope.selected.key;
+                                }else{
+                                    scope.hasKeywordFacet = true;
+                                    scope.sbResultList.push({ key : 'text', type: 'string', value :  scope.selected.key });
+                                }
+                                scope.selected.key = "" ;
+                                $timeout(function () {
+                                    scope.resultList = scope.sbResultList.slice(0);
+                                    elem.find('input')[elem.find('input').length-1].focus();
+                                    scope.selectedResult = null;
+                                });
+                            }
+                        });
+                    }else if (evt.which === 9) {
+                        scope.$apply(function () {
+                            //angular.element(evt.srcElement).triggerHandler("keydown",{keyCode:13});
+                        });
+                    }
+                });
+
+                scope.bindValueInput = function(inputElem){
+                    $timeout(function () {
+                        inputElem.find('input').bind('keydown', function (evt) {
+
+                            if (HOT_KEYS.indexOf(evt.which) === -1) {
+                                return;
+                            }
+
+                            evt.preventDefault();
+
+                            if (evt.which === 13 || evt.which === 9) {
+                                if(scope.hasKeywordFacet){
+                                    scope.$apply(function () {
+                                        if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
+                                            var tmp = scope.sbResultList.pop();
+                                            scope.sbResultList.splice(scope.sbResultList.length-1,0, tmp);
+                                        }
+                                    });
+                                }
+                                scope.resultList = scope.sbResultList.slice(0);
+                                elem.find('input')[elem.find('input').length-1].focus();
+                                scope.selectedResult = null;
+                            }
+                        });
+                    });
+                }
 
                 scope.getValues = function (key){
                     for (var facet in scope.facetList){
@@ -32,80 +108,46 @@ angular.module('angularjssearchbox', ['ui.bootstrap', 'ui']).
                     return [];
                 }
 
+                scope.$on('$typeahead.select',function (evt, value){
+                    scope.$apply(function () {
+                        scope.useKeywordFacet = false;
+                        if(typeof value === 'object'){
+                            scope.selected.value = "" ;
+                            scope.sbResultList.push({ key : value.name, type: value.type, value : '' });
+                            scope.selected.key = "" ;
+                        }else{
+                            $timeout(function() {
+                                if(scope.hasKeywordFacet){
+                                    if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
+                                        var tmp = scope.sbResultList.pop();
+                                        scope.sbResultList.splice(scope.sbResultList.length-1,0, tmp);
+                                    }
+                                }
+                                scope.resultList = scope.sbResultList.slice(0);
+                                elem.find('input')[elem.find('input').length-1].focus();
+                                scope.selectedResult = null;
+                            },100);
+                        }
+                    });
+                });
+
                 scope.selectResult = function (index){
                     scope.selectedResult = index ;
                 }
 
                 scope.removeFilter = function ($index){
-                    scope.resultList.splice($index,1);
-                }
-
-                scope.removeValue = function ($index){
-                    scope.selected.value = scope.resultList[$index].value ;
-                    scope.resultList[$index].value = null ;
+                    if(scope.sbResultList[$index].key === "text"){
+                        scope.hasKeywordFacet = false;
+                    }
+                    scope.sbResultList.splice($index,1);
+                    scope.resultList = scope.sbResultList.slice(0);
                 }
 
                 scope.removeAll = function (){
+                    scope.hasKeywordFacet = false;
+                    scope.sbResultList.length = 0;
                     scope.resultList.length = 0;
                 }
-
-                // typeAhead facet selection
-                scope.onSelect = function ($model) {
-                    scope.selected.value = null ;
-                    if ($model.hasOwnProperty('type')){
-                        scope.resultList.push({ key : $model.name, type: $model.type, value :  null });
-                    }else{
-                        scope.resultList.push({ key : $model.name, type: null, value :  null });
-                    }
-                    scope.selected.key = null ;
-                }
-
-                // key-press enter (should be blur too) facet selection
-                scope.onFreeSelect = function ($model) {
-                    if ($model != null){
-                        scope.selected.value = null ;
-                        scope.resultList.push({ key : 'text', type: 'string', value :  $model });
-                        scope.selected.key = null ;
-                    }else if(scope.selected.key != null){
-                        scope.selected.value = null ;
-                        scope.resultList.push({ key : 'text', type: 'string', value :  scope.selected.key });
-                        scope.selected.key = null ;
-                    }
-                }
-
-                // typeAhead value selection
-                scope.onSelectValue = function ($index, $model) {
-                    scope.resultList[$index].value = $model;
-                    scope.selected.key = null ;
-                    scope.selected.value = null ;
-                    $timeout(function() {
-                        elem.find('input')[elem.find('input').length-1].focus();
-                        scope.selectedResult = null;
-                    });
-                }
-
-                // key-press enter (should be blur too) value selection
-                scope.onFreeSelectValue = function ($index,$model) {
-                    if ($model != null){
-                        scope.resultList[$index].value =  $model ;
-                        scope.selected.key = null ;
-                        scope.selected.value = null ;
-                        $timeout(function() {
-                            elem.find('input')[elem.find('input').length-1].focus();
-                            scope.selectedResult = null;
-                        });
-                    }else if (scope.selected.value != null){
-                        scope.resultList[$index].value =  scope.selected.value ;
-                        scope.selected.key = null ;
-                        scope.selected.value = null ;
-                        $timeout(function() {
-                            elem.find('input')[elem.find('input').length-1].focus();
-                            scope.selectedResult = null;
-                        });
-                    }
-
-                }
-
             }
         }
     }]);

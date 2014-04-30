@@ -1,6 +1,4 @@
 .VS-search .VS-icon {
-  background-repeat: no-repeat;
-  background-position: center center;
   vertical-align: middle;
   width: 16px;
   height: 16px; }
@@ -8,17 +6,14 @@
 .VS-search .VS-icon-cancel {
   width: 11px;
   height: 11px;
-  background-position: center 0;
-  background-image: url('../images/embed/icons/cancel_search.png');
   cursor: pointer; }
 
 .VS-search .VS-icon-cancel:hover {
-  background-position: center -11px; }
+  color: #ba0909; }
 
 .VS-search .VS-icon-search {
   width: 12px;
-  height: 12px;
-  background-image: url('../images/embed/icons/search_glyph.png'); }
+  height: 12px; }
 
 /*------------------------------ RESET + DEFAULT STYLES ---------------------------------*/
 /* 
@@ -32,7 +27,6 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   font-weight: inherit;
   font-style: inherit;
   font-size: 100%;
-  font-family: inherit;
   vertical-align: baseline; }
 
 .VS-search :focus {
@@ -60,6 +54,13 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   -o-user-select: none;
   user-select: none; }
 
+.VS-search-box-wrapper {
+  overflow: auto;
+  height: 34px; }
+
+.VS-search-box-wrapper:hover {
+  height: auto; }
+
 .VS-search input {
   display: block;
   border: none;
@@ -72,7 +73,8 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   background: transparent;
   font-size: 16px;
   line-height: 20px;
-  width: 100%; }
+  min-width: 20px;
+  height: 21px; }
 
 .VS-interface, .VS-search .dialog, .VS-search input {
   line-height: 1.1em; }
@@ -83,8 +85,7 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 .VS-search .VS-search-box {
   cursor: text;
   position: relative;
-  min-height: 45px;
-  height: auto; }
+  min-height: 34px; }
 
 .VS-search .VS-search-box.VS-focus {
   border-color: #acf;
@@ -107,8 +108,7 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 .VS-search input, .VS-search .VS-input-width-tester {
   padding: 2px 0;
   float: left;
-  color: #808080;
-  width: auto; }
+  color: #808080; }
 
 .VS-search.VS-focus input {
   color: #606060; }
@@ -116,12 +116,14 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 .VS-search .VS-icon-search {
   position: absolute;
   left: 9px;
-  top: 15px; }
+  top: 8px;
+  font-size: 0.9em; }
 
 .VS-search .VS-icon-cancel {
   position: absolute;
   right: 9px;
-  top: 15px; }
+  top: 7px;
+  font-size: 1.1em; }
 
 /* ================ */
 /* = Search Facet = */
@@ -132,9 +134,9 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   padding: 0.5px 4px 0 18px;
   position: relative;
   border: 1px solid transparent;
-  height: 35px;
+  height: 24px;
   cursor: pointer;
-  line-height: 30px; }
+  line-height: 24px; }
 
 .VS-search .search_parameter.selected {
   -webkit-border-radius: 4px;
@@ -172,111 +174,31 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 
 .VS-search .search_parameter input {
   margin: 0;
-  padding: 0;
-  color: #000; }
+  padding: 0; }
 
 .VS-search .search_parameter .search_parameter_remove {
   position: absolute;
-  left: 2px;
-  top: 10px; }
+  font-size: 0.8em;
+  left: 4px;
+  top: 1px; }
 
 .VS-search .search_parameter.is_selected .search_parameter_remove {
   opacity: 0.4;
   left: 3px;
   filter: alpha(opacity=40);
-  background-position: center -11px; }
+  color: #ba0909; }
 
 .VS-search .search_parameter .search_parameter_remove:hover {
-  opacity: 1; }
+  opacity: 1;
+  color: #ba0909; }
 
-.VS-search .search_parameter.is_editing .key, .VS-search .search_parameter.is_selected .key {
-  color: #000; }
 
-.VS-icon-cancel:hover ~ div {
-  color: darkred !important; }
+.VS-icon-cancel:hover ~ div, .VS-icon-cancel:hover ~ div input {
+  color: #ba0909 !important; }
 
-/* ================ */
-/* = Autocomplete = */
-/* ================ */
-.ui-helper-hidden-accessible {
-  display: none; }
+.value {
+  position: relative;
+  min-width: 40px; }
 
-.VS-interface.ui-autocomplete {
-  position: absolute;
-  border: 1px solid #C0C0C0;
-  border-top: 1px solid #D9D9D9;
-  background-color: #F6F6F6;
-  cursor: pointer;
-  z-index: 10000;
-  padding: 0;
-  margin: 0;
-  width: auto;
-  min-width: 80px;
-  max-width: 220px;
-  max-height: 240px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  font-size: 13px;
-  top: 5px;
-  opacity: 0.97;
-  box-shadow: 3px 4px 5px -2px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 3px 4px 5px -2px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 3px 4px 5px -2px rgba(0, 0, 0, 0.5); }
-
-.VS-interface.ui-autocomplete li.ui-autocomplete-category {
-  font-size: 11px;
-  padding: 4px 4px 4px;
-  border-top: 1px solid #A2A2A2;
-  border-bottom: 1px solid #A2A2A2;
-  background-color: #B7B7B7;
-  text-shadow: 0 -1px 0 #999;
-  font-weight: bold;
-  color: white;
-  cursor: default; }
-
-.VS-interface.ui-autocomplete li a.category-child {
-  padding-left: 14px !important;
-  font-size: 12px !important; }
-
-.VS-interface.ui-autocomplete .ui-menu-item {
-  float: none; }
-
-.VS-interface.ui-autocomplete .ui-menu-item a {
-  color: #000;
-  outline: none;
-  display: block;
-  padding: 3px 4px 5px;
-  border-radius: none;
-  line-height: 1;
-  background-color: #F8F8F8;
-  background-image: -moz-linear-gradient(top, #F8F8F8, #F3F3F3);
-  /* FF3.6 */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#F3F3F3));
-  /* Saf4+, Chrome */
-  background-image: linear-gradient(top, #F8F8F8, #F3F3F3);
-  border-top: 1px solid #FAFAFA;
-  border-bottom: 1px solid #f0f0f0; }
-
-.VS-interface.ui-autocomplete .ui-menu-item a:active {
-  outline: none; }
-
-.VS-interface.ui-autocomplete .ui-menu-item .ui-state-hover, .VS-interface.ui-autocomplete .ui-menu-item .ui-state-focus {
-  background-color: #6483F7;
-  background-image: -moz-linear-gradient(top, #648bF5, #2465f3);
-  /* FF3.6 */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#648bF5), to(#2465f3));
-  /* Saf4+, Chrome */
-  background-image: linear-gradient(top, #648bF5, #2465f3);
-  border-top: 1px solid #5b83ec;
-  border-bottom: 1px solid #1459e9;
-  border-left: none;
-  border-right: none;
-  color: white;
-  margin: 0; }
-
-.VS-interface.ui-autocomplete .ui-corner-all {
-  border-radius: 0; }
-
-.VS-interface.ui-autocomplete li {
-  list-style: none;
-  width: auto; }
+.input-facet {
+  min-width: 40px; }
