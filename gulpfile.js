@@ -55,7 +55,7 @@ gulp.task('styles', function () {
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('debs', function () {
+gulp.task('deps', function () {
     return gulp.src(
             paths.deps.concat([
                 'build/angularjssearchbox.js',
@@ -83,4 +83,4 @@ gulp.task('watch', function() {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['serve', 'scripts', 'templates', 'styles', 'watch']);
+gulp.task('default', ['serve', 'scripts', 'templates', 'styles', 'deps', 'watch']);
