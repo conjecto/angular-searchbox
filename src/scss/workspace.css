@@ -14,7 +14,9 @@
 }
 .VS-search-box-wrapper{
     overflow:auto;
-    height: 34px;
+    /*height:34px;*/
+    height: auto;
+    /* 34px; */
 }
 .VS-search-box-wrapper:hover{
     height:auto;
@@ -169,9 +171,5 @@
 
 .value{
     position:relative;
-    min-width:40px;
-}
-
-.input-facet{
     min-width:40px;
 }

@@ -6,13 +6,12 @@
   <link rel="stylesheet" href="app.css"/>
   <link rel="stylesheet" href="../build/angularjssearchbox.css" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../bower_components/bootstrap-additions/dist/bootstrap-additions.min.css">
-    <link rel="stylesheet" href="../bower_components/angular-motion/dist/angular-motion.min.css">
+
+
 
 
 
   <script src="../bower_components/angular/angular.js"></script>
-  <script src="../bower_components/angular-animate/angular-animate.min.js"></script>
   <script src="../bower_components/angular-strap/dist/angular-strap.min.js"></script>
   <script src="../bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
 
@@ -24,16 +23,16 @@
 <body >
 
     <div style="width:800px;height:100px;margin:50px auto;" class='container-fluid' ng-controller="TestSearchBox">
-        <div search-box result-list="parameters" facet-list="facets" debug="true"></div>
+        <div search-box result-list="parameters" facet-list="facets" ></div>
         <p> {{ parameters }} </p>
     </div>
 
 
   <script>
       function TestSearchBox($scope){
-          $scope.parameters = [
-                                {'key':'formation','type':'string','value':'Stage'},
-                                {'key':'formation','type':'string','value': 'Action diverse'}
+          $scope.parameters = [{'key':'truc','type':'string','value':'sfd'},
+              {'key':'plop','type':'string','value': 'Action diverse'}
+
                                ];
           $scope.facets = [
                             {   'name' : 'formation',

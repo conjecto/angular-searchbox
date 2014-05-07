@@ -7,7 +7,9 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
         return function(scope, element){
             $timeout(function() {
                 if(!scope.useKeywordFacet){
+                    if(!element[0].value)
                     element[0].focus();
+
                 }
             });
         };
@@ -15,6 +17,7 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
    directive('repeatDone', function() {
      return function(scope, element, attrs) {
              scope.bindValueInput(element);
+
      }
    }).
    directive('searchBox', ['$timeout', function($timeout) {
@@ -28,7 +31,10 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
             },
             link: function(scope, elem, attrs){
 
-                scope.selected = {key:"", value:""};
+                $timeout(function () {
+                    scope.selected = {key:"", value:""};
+                });
+
                 scope.selectedResult = null;
                 scope.debug = scope.debug || false;
                 scope.useKeywordFacet = false;
@@ -102,6 +108,9 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
                     });
                 }
 
+                scope.clickOnBlank = function(){
+                    elem.find('input')[elem.find('input').length-1].focus();
+                }
                 scope.getFacetLabel = function(key){
                     for (var facet in scope.facetList){
                         if(scope.facetList[facet].name == key)

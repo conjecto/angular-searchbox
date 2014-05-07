@@ -56,7 +56,9 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 
 .VS-search-box-wrapper {
   overflow: auto;
-  height: 34px; }
+  /*height:34px;*/
+  height: auto;
+  /* 34px; */ }
 
 .VS-search-box-wrapper:hover {
   height: auto; }
@@ -198,7 +200,4 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 
 .value {
   position: relative;
-  min-width: 40px; }
-
-.input-facet {
   min-width: 40px; }
