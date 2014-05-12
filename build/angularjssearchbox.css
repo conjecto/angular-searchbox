@@ -1,26 +1,26 @@
-.VS-search .VS-icon {
+.SB-search .SB-icon {
   vertical-align: middle;
   width: 16px;
   height: 16px; }
 
-.VS-search .VS-icon-cancel {
+.SB-search .SB-icon-cancel {
   width: 11px;
   height: 11px;
   cursor: pointer; }
 
-.VS-search .VS-icon-cancel:hover {
+.SB-search .SB-icon-cancel:hover {
   color: #ba0909; }
 
-.VS-search .VS-icon-search {
+.SB-search .SB-icon-search {
   width: 12px;
   height: 12px; }
 
 /*------------------------------ RESET + DEFAULT STYLES ---------------------------------*/
-/* 
+/*
 Eric Meyer's final reset.css
-Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/ 
+Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 */
-.VS-search div, .VS-search span, .VS-search a, .VS-search img, .VS-search ul, .VS-search li, .VS-search form, .VS-search label, .VS-interface ul, .VS-interface li, .VS-interface {
+.SB-search div {
   margin: 0;
   padding: 0;
   outline: 0;
@@ -29,20 +29,17 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   font-size: 100%;
   vertical-align: baseline; }
 
-.VS-search :focus {
+.SB-search :focus {
   outline: 0; }
 
-.VS-search {
+.SB-search {
   line-height: 1;
   color: black; }
-
-.VS-search ol, .VS-search ul {
-  list-style: none; }
 
 /* ===================== */
 /* = General and Reset = */
 /* ===================== */
-.VS-search {
+.SB-search {
   /* Make Unselectable */
   -webkit-user-select: none;
   /* Chrome/Safari */
@@ -54,16 +51,16 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   -o-user-select: none;
   user-select: none; }
 
-.VS-search-box-wrapper {
+.SB-search-box-wrapper.form-control.SB-search-box {
   overflow: auto;
   /*height:34px;*/
   height: auto;
   /* 34px; */ }
 
-.VS-search-box-wrapper:hover {
+.SB-search-box-wrapper:hover {
   height: auto; }
 
-.VS-search input {
+.SB-search input {
   display: block;
   border: none;
   -moz-box-shadow: none;
@@ -78,50 +75,44 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   min-width: 20px;
   height: 21px; }
 
-.VS-interface, .VS-search .dialog, .VS-search input {
-  line-height: 1.1em; }
-
 /* ========== */
 /* = Layout = */
 /* ========== */
-.VS-search .VS-search-box {
+.SB-search .SB-search-box {
   cursor: text;
   position: relative;
   min-height: 34px; }
 
-.VS-search .VS-search-box.VS-focus {
-  border-color: #acf;
-  -webkit-box-shadow: inset 0px 0px 3px #acf;
-  -moz-box-shadow: inset 0px 0px 3px #acf;
-  box-shadow: inset 0px 0px 3px #acf; }
-
-.VS-search .VS-placeholder {
+.SB-search .SB-placeholder {
   position: absolute;
-  top: 7px;
-  left: 4px;
-  margin: 0 20px 0 22px;
   color: #808080;
-  font-size: 14px; }
+  font-size: 14px;
+  margin: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 5px;
+  padding-left: 28px; }
 
-.VS-search .VS-search-inner {
+.SB-search .SB-search-inner {
   position: relative;
   margin: 3px 20px; }
 
-.VS-search input, .VS-search .VS-input-width-tester {
+.SB-search input {
   padding: 2px 0;
   float: left;
   color: #808080; }
 
-.VS-search.VS-focus input {
+.SB-search.SB-focus input {
   color: #606060; }
 
-.VS-search .VS-icon-search {
+.SB-search .SB-icon-search {
   position: absolute;
   left: 9px;
   top: 8px;
   font-size: 0.9em; }
 
-.VS-search .VS-icon-cancel {
+.SB-search .SB-icon-cancel {
   position: absolute;
   right: 9px;
   top: 7px;
@@ -130,7 +121,7 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 /* ================ */
 /* = Search Facet = */
 /* ================ */
-.VS-search .search_parameter {
+.SB-search .search_parameter {
   float: left;
   margin: 0.5px 2px;
   padding: 0.5px 4px 0 18px;
@@ -140,7 +131,7 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   cursor: pointer;
   line-height: 24px; }
 
-.VS-search .search_parameter.selected {
+.SB-search .search_parameter.selected {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   background-color: #d2e6fd;
@@ -151,51 +142,41 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   background-image: linear-gradient(top, #d2e6fd, #b0d1f9);
   border: 1px solid #6eadf5; }
 
-.VS-search .search_parameter div {
+.SB-search .search_parameter div {
   float: left;
   margin: 0 2px; }
 
-.VS-search .search_parameter div:hover {
+.SB-search .search_parameter div:hover {
   color: #000; }
 
-.VS-search .search_parameter div.key {
+.SB-search .search_parameter div.key {
   float: left;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 0.8em;
   color: #808080; }
 
-.VS-search .search_parameter.is_selected div.key {
-  margin-left: 3px; }
-
-.VS-search .search_parameter div.operator {
-  font-style: italic; }
-
-.VS-search .search_parameter .search_parameter_input_container {
-  float: left; }
-
-.VS-search .search_parameter input {
+.SB-search .search_parameter input {
   margin: 0;
   padding: 0; }
 
-.VS-search .search_parameter .search_parameter_remove {
+.SB-search .search_parameter .search_parameter_remove {
   position: absolute;
   font-size: 0.8em;
   left: 4px;
   top: 1px; }
 
-.VS-search .search_parameter.is_selected .search_parameter_remove {
+.SB-search .search_parameter.is_selected .search_parameter_remove {
   opacity: 0.4;
   left: 3px;
   filter: alpha(opacity=40);
   color: #ba0909; }
 
-.VS-search .search_parameter .search_parameter_remove:hover {
+.SB-search .search_parameter .search_parameter_remove:hover {
   opacity: 1;
   color: #ba0909; }
 
-
-.VS-icon-cancel:hover ~ div, .VS-icon-cancel:hover ~ div input {
+.SB-icon-cancel:hover ~ div, .SB-icon-cancel:hover ~ div input {
   color: #ba0909 !important; }
 
 .value {

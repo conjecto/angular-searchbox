@@ -1,14 +1,16 @@
-.VS-search .VS-icon {
+.SB-search .SB-icon {
     vertical-align: middle;
     width: 16px; height: 16px;
 }
-.VS-search .VS-icon-cancel {
+.SB-search .SB-icon-cancel {
     width: 11px; height: 11px;
     cursor: pointer;
 }
-.VS-search .VS-icon-cancel:hover {
+.SB-search .SB-icon-cancel:hover {
     color:#ba0909;
 }
-.VS-search .VS-icon-search {
+.SB-search .SB-icon-search {
     width: 12px; height: 12px;
 }
+
+
