@@ -9,14 +9,10 @@ var templateCache = require('gulp-angular-templatecache');
 var paths = {
   scripts: ['./src/js/**/*.js'],
   deps: [
-      "bower_components/angular-strap/dist/modules/typeahead.min.js",
-      "bower_components/angular-strap/dist/modules/typeahead.tpl.min.js",
       "bower_components/angular-strap/dist/modules/tooltip.min.js",
       "bower_components/angular-strap/dist/modules/tooltip.tpl.min.js",
       "bower_components/angular-strap/dist/modules/parse-options.min.js",
-      "bower_components/angular-strap/dist/modules/dimensions.min.js",
-      "bower_components/angular-strap/dist/modules/datepicker.min.js",
-      "bower_components/angular-strap/dist/modules/date-parser.min.js"
+      "bower_components/angular-strap/dist/modules/dimensions.min.js"
   ],
   templates: ['./src/templates/**/*.html'],
   styles: ['./src/scss/**/*.{scss,css}']

@@ -1,51 +1,39 @@
 <pre ng-show="debug">Model: {{selected.key | json}} Value : {{ selected.value | json}} opened : {{ opened }}</pre>
 <div class="SB-search">
-    <div class="SB-search-box-wrapper form-control SB-search-box ">
+    <div class="SB-search-box-wrapper form-control SB-search-box " >
         <div class="SB-icon SB-icon-search"><span class="glyphicon glyphicon-search"></span></div>
         <div class="SB-placeholder" ng-click="selectInputFacet()"></div>
         <div class="SB-search-inner" >
             <div class="search_parameter" ng-class="{ selected : $index == selectedResult }"
                  ng-repeat="parameter in sbResultList" ng-click="selectResult($index)"
-                 repeat-done="test()">
+                 repeat-done>
                 <div class="search_parameter_remove SB-icon SB-icon-cancel" ng-click="removeFilter($index)"><span class="glyphicon glyphicon-remove"></span></div>
                 <div class="key">{{ getFacetLabel(parameter.key) }}</div>
-                <div class="value" ><span style="position:relative;z-index:1;display:inline-block;visibility: hidden;" >{{ parameter.value }}</span>
+                <div class="value" ><span class="SB-inputSizer" >{{ parameter.value }}</span>
                 <input type="text"
+                       data-tah-index="{{ $index }}"
                        ng-model="parameter.value"
                        ng-if="(parameter.type == null || parameter.type == 'string')"
-                       class="form-control"
+                       class="form-control SB-inputValue"
                        limit="8"
                        data-trigger="focus"
                        data-min-length="0"
-                       style="position:absolute;z-index:2;width:100%;font-size:1em;top:0px;"
-                       value="{{ parameter.value }}"
                        data-container="body"
-                       ng-options="element.name as element.name + ' (' +element.count+')' for element in getValues(parameter.key) | filter:{name:$viewValue}"
-                       sb-focus bs-typeahead>
-                <input type="text"
-                       ng-model="parameter.value"
-                       ng-if="parameter.type == 'date'"
-                       class="form-control"
-                       data-date-format="dd-MM-yyyy"
-                       data-container="body"
-                       style="position:absolute;z-index:2;width:100%;font-size:1em;top:0px;"
-                       data-autoclose="1"
-                       bs-datepicker
-                       sb-focus>
-
+                       ng-options="element.label as element.label + ' (' +element.count+')' for element in getValues(parameter.key) | filter:{label:$viewValue}"
+                       sb-focus sb-typeahead>
                 </div>
             </div>
-            <div class="search_parameter">
-            <input input-facet
+            <div class="search_parameter input-facet">
+            <input
                    data-min-length="0"
                    type="text"
                    ng-model="selected.key"
-                   data-limit="8"
+                   data-limit="30"
                    data-trigger="focus"
                    data-container="body"
                    data-delay="{ show: 500, hide: 0 }"
                    ng-options="element as element.label for element in facetList | filter:{label:$viewValue}"
-                   class="form-control input-facet" bs-typeahead>
+                   class="form-control" sb-typeahead>
             </div>
 
         </div>

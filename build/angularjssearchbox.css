@@ -118,13 +118,19 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   top: 7px;
   font-size: 1.1em; }
 
+.SB-inputSizer {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  visibility: hidden; }
+
 /* ================ */
 /* = Search Facet = */
 /* ================ */
 .SB-search .search_parameter {
   float: left;
   margin: 0.5px 2px;
-  padding: 0.5px 4px 0 18px;
+  padding: 0.5px 1px 0 18px;
   position: relative;
   border: 1px solid transparent;
   height: 24px;
@@ -141,6 +147,9 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   /* Saf4+, Chrome */
   background-image: linear-gradient(top, #d2e6fd, #b0d1f9);
   border: 1px solid #6eadf5; }
+
+.search_parameter.input-facet {
+  padding: 0.5px 1px 0 1px; }
 
 .SB-search .search_parameter div {
   float: left;
@@ -182,3 +191,10 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 .value {
   position: relative;
   min-width: 40px; }
+
+.search_parameter .value .SB-inputValue {
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  font-size: 1em;
+  top: 0px; }

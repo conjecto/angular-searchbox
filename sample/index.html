@@ -12,7 +12,7 @@
 
 
   <script src="../bower_components/angular/angular.js"></script>
-  <script src="../bower_components/angular-strap/dist/angular-strap.min.js"></script>
+  <script src="../bower_components/angular-strap/dist/angular-strap.js"></script>
   <script src="../bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
 
 
@@ -29,8 +29,8 @@
 
   <script>
       function TestSearchBox($scope){
-          $scope.parameters = [{'key':'truc','type':'string','value':'sfd'},
-              {'key':'plop','type':'string','value': 'Action diverse'}
+          $scope.parameters = [{'key':'formation','type':'string','value':'stage'},
+
 
                                ];
           $scope.facets = [
@@ -38,9 +38,9 @@
                                 'label':'Formation',
                                 'type':'string',
                                 'items': [
-                                          {'name':'Stage','count':32 },
-                                          {'name':'Enseignement Cursus','count':8 },
-                                          {'name':'Action diverse','count':4 }
+                                          {'name':'stage','label':'Stage','count':32 },
+                                          {'name':'enseignement-cursus','label':'Enseignement Cursus','count':8 },
+                                          {'name':'action-diverse','label':'Action diverse','count':4 }
                                          ]
 
                             },

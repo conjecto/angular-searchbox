@@ -2,7 +2,7 @@
 
 /* Directives */
 
-angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStrap.datepicker']).
+angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
    directive('sbFocus', ['$timeout', function($timeout){
         return function(scope, element){
             $timeout(function() {
@@ -28,18 +28,54 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
                 facetList: '=',
                 debug: '=?'
             },
-            link: function(scope, elem, attrs){
+            controller: function($scope){
 
-                $timeout(function () {
-                    scope.selected = {key:"", value:""};
-                });
+                function initFacetList(facetList){
+                    for (var facet in facetList){
+                        for (var item in facetList[facet].items){
+                            if(!facetList[facet].items[item].hasOwnProperty('label')){
+                                // @todo add type checking to format label
+                                facetList[facet].items[item].label=facetList[facet].items[item].name;
+                            }
+                        }
+                    }
+                    return facetList;
+                }
+                function getValueLabel(facet,value){
+                    for (var filter in $scope.facetList){
+                        if($scope.facetList[filter].name === facet){
+                            for (var item in $scope.facetList[filter].items){
+                                if($scope.facetList[filter].items[item].name === value){
+                                    return $scope.facetList[filter].items[item].label;
+                                }
+                            }
+                        }
+                    }
+                }
+                function initSbResult(resultList){
+                    var rez = [];
+                    for (var filter in resultList){
+                        var tmpFilter = new Object();
+                        tmpFilter.key = resultList[filter].key;
+                        tmpFilter.type = "string";
+                        tmpFilter.value = getValueLabel(tmpFilter.key,resultList[filter].value);
+                        rez.push(tmpFilter);
+                    }
+                    return rez;
+                }
+                $scope.facetList = initFacetList($scope.facetList);
+                $scope.sbResultList = initSbResult($scope.resultList);
+                $scope.selected = {key:"", value:""};
+
+            },
+            link: function(scope, elem, attrs){
 
                 scope.tmpInputValue = null;
                 scope.selectedResult = null;
                 scope.debug = scope.debug || false;
                 scope.useKeywordFacet = false;
                 scope.hasKeywordFacet = false;
-                scope.sbResultList = scope.resultList.slice(0);
+
 
                 var HOT_KEYS = [9, 13, 37, 39];
 
@@ -60,14 +96,15 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
                                 scope.selected.value = "" ;
                                 if(scope.hasKeywordFacet){
                                     scope.sbResultList[scope.sbResultList.length-1].value +=" " + scope.selected.key;
+                                    scope.resultList[scope.resultList.length-1].value +=" " + scope.selected.key;
                                 }else{
                                     scope.hasKeywordFacet = true;
-                                    scope.sbResultList.push({ key : 'text', type: 'string', value :  scope.selected.key });
+                                    scope.sbResultList.push({ key : 'text', type: 'string', value :  scope.selected.key});
+                                    scope.resultList.push({ key : 'text', type: 'string', value :  scope.selected.key});
                                 }
                                 scope.selected.key = "" ;
                                 $timeout(function () {
-                                    scope.resultList = scope.sbResultList.slice(0);
-                                    elem.find('input')[elem.find('input').length-1].focus();
+                                    scope.selectInputFacet();
                                     scope.selectedResult = null;
                                 });
                             }
@@ -90,6 +127,7 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
                             evt.preventDefault();
 
                             if (evt.which === 13 || evt.which === 9) {
+                                console.log(evt);
                                 if(scope.hasKeywordFacet){
                                     scope.$apply(function () {
                                         if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
@@ -99,8 +137,12 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
                                     });
                                 }
                                 scope.$apply(function () {
-                                    scope.resultList = scope.sbResultList.slice(0);
-                                    elem.find('input')[elem.find('input').length-1].focus();
+                                    var tmpFilter = new Object();
+                                    tmpFilter.key = scope.sbResultList[evt.srcElement.dataset.tahIndex].key;
+                                    tmpFilter.type = scope.sbResultList[evt.srcElement.dataset.tahIndex].type;
+                                    tmpFilter.value = scope.sbResultList[evt.srcElement.dataset.tahIndex].value;
+                                    scope.resultList[evt.srcElement.dataset.tahIndex] = tmpFilter;
+                                    scope.selectInputFacet();
                                     scope.selectedResult = null;
                                 });
                             }
@@ -120,6 +162,14 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
                     return key;
                 }
 
+                scope.getValueName = function(key,index,label){
+                    for (var facet in scope.facetList){
+                        if(scope.facetList[facet].name == key)
+                            return scope.facetList[facet].items[index].name ;
+                    }
+                    return label;
+                }
+
                 scope.getValues = function (key){
                     for (var facet in scope.facetList){
                         if(scope.facetList[facet].name == key)
@@ -128,23 +178,31 @@ angular.module('angularjssearchbox', ['mgcrea.ngStrap.typeahead', 'mgcrea.ngStra
                     return [];
                 }
 
-                scope.$on('$typeahead.select',function (evt, value){
+                scope.$on('$typeahead.select',function (evt, value,index, tahIndex){
                     scope.$apply(function () {
                         scope.useKeywordFacet = false;
-                        if(typeof value === 'object'){
+//                        console.log(tahIndex);
+                        if(tahIndex == -1){
+                            //facet selection
                             scope.selected.value = "" ;
                             scope.sbResultList.push({ key : value.name, type: value.type, value : '' });
                             scope.selected.key = "" ;
                         }else{
+                            //value selection
                             $timeout(function() {
                                 if(scope.hasKeywordFacet){
                                     if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
                                         var tmp = scope.sbResultList.pop();
                                         scope.sbResultList.splice(scope.sbResultList.length-1,0, tmp);
+                                        tahIndex += -1;
                                     }
                                 }
-                                scope.resultList = scope.sbResultList.slice(0);
-                                elem.find('input')[elem.find('input').length-1].focus();
+                                var tmpFilter = new Object();
+                                tmpFilter.key = scope.sbResultList[tahIndex].key;
+                                tmpFilter.type = scope.sbResultList[tahIndex].type;
+                                tmpFilter.value = scope.getValueName(tmpFilter.key,index,value);
+                                scope.resultList[tahIndex] = tmpFilter;
+                                scope.selectInputFacet();
                                 scope.selectedResult = null;
                             },100);
                         }
