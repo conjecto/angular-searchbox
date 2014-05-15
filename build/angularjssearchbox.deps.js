@@ -98,7 +98,9 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                 }
                 $scope.facetList = initFacetList($scope.facetList);
                 $scope.sbResultList = initSbResult($scope.resultList);
-                $scope.selected = {key:"", value:""};
+                $timeout(function(){
+                    $scope.selected = {key:"", value:""};
+                });
 
             },
             link: function(scope, elem, attrs){
