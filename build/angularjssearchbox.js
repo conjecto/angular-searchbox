@@ -36,7 +36,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                 scope.useKeywordFacet = false;
                 scope.hasKeywordFacet = false;
 
-
+                // add label to item if not exist
                 function initFacetList(facetList){
                     for (var facet in facetList){
                         for (var item in facetList[facet].items){
@@ -48,6 +48,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     }
                     return facetList;
                 }
+
+                // give label of a value, return the value if not exist
                 function getValueLabel(facet,value){
                     for (var filter in scope.facetList){
                         if(scope.facetList[filter].name === facet){
@@ -60,6 +62,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     }
                     return value;
                 }
+
+                // create sbResultList with type on filter
                 function initSbResult(resultList){
                     var rez = [];
                     for (var filter in resultList){
@@ -122,6 +126,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     }
                 });
 
+                //bind keyboard events: enter(13) and tab(9) on value Input
                 scope.bindValueInput = function(inputElem){
                     $timeout(function () {
                         inputElem.find('input').bind('keydown', function (evt) {
@@ -133,7 +138,6 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                             evt.preventDefault();
 
                             if (evt.which === 13 || evt.which === 9) {
-                                console.log(evt);
                                 if(scope.hasKeywordFacet){
                                     scope.$apply(function () {
                                         if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
@@ -156,6 +160,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     });
                 }
 
+                // help to focus the input facet
                 scope.selectInputFacet = function(){
                     elem.find('input')[elem.find('input').length-1].focus();
                 }
@@ -168,6 +173,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     return key;
                 }
 
+                // return the value of a label
                 scope.getValueName = function(key,index,label){
                     for (var facet in scope.sbFacetList){
                         if(scope.sbFacetList[facet].name == key)
@@ -176,6 +182,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     return label;
                 }
 
+                // return all items of a facet
                 scope.getValues = function (key){
                     for (var facet in scope.sbFacetList){
                         if(scope.sbFacetList[facet].name == key)
@@ -184,7 +191,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     return [];
                 }
 
-                scope.$on('$typeahead.select',function (evt, value,index, tahIndex){
+                // handle selection with the sbTypeAhead directive (tahIndex is the $index in the ngRepeat)
+                scope.$on('$typeahead.select',function (evt, value, index, tahIndex){
                     scope.$apply(function () {
                         scope.useKeywordFacet = false;
                         if(tahIndex == -1){
@@ -214,10 +222,12 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     });
                 });
 
+                // select filter (facet + value)
                 scope.selectResult = function (index){
                     scope.selectedResult = index ;
                 }
 
+                // remove filter (facet + value)
                 scope.removeFilter = function ($index){
                     if(scope.sbResultList[$index].key === "text"){
                         scope.hasKeywordFacet = false;
@@ -226,6 +236,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     scope.resultList = scope.sbResultList.slice(0);
                 }
 
+                // clean all the filters
                 scope.removeAll = function (){
                     scope.hasKeywordFacet = false;
                     scope.sbResultList.length = 0;

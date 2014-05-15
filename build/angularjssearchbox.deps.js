@@ -165,7 +165,6 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                             evt.preventDefault();
 
                             if (evt.which === 13 || evt.which === 9) {
-                                console.log(evt);
                                 if(scope.hasKeywordFacet){
                                     scope.$apply(function () {
                                         if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
