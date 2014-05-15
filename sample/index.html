@@ -24,63 +24,74 @@
 
     <div style="width:800px;height:100px;margin:50px auto;" class='container-fluid' ng-controller="TestSearchBox">
         <div search-box result-list="parameters" facet-list="facets" debug="true"></div>
+        <button ng-click="onClick()">Ajouter facettes</button>
     </div>
-
 
   <script>
       function TestSearchBox($scope){
-          $scope.parameters = [{'key':'formation','type':'string','value':'stage'},{'key':'hhsg','value':'hsdhh'}
+          $scope.parameters = [{'key':'formation','type':'string','value':'stage'},{'key':'hhsg','value':'hsdhh'}];
+          $scope.facets = [{   'name' : 'formation',
+              'label':'Formation',
+              'type':'string',
+              'items': [
+                  {'name':'stage','label':'Stage','count':32 },
+                  {'name':'enseignement-cursus','label':'Enseignement Cursus','count':8 },
+                  {'name':'action-diverse','label':'Action diverse','count':4 }
+              ]
 
+          }];
 
-                               ];
-          $scope.facets = [
-                            {   'name' : 'formation',
-                                'label':'Formation',
-                                'type':'string',
-                                'items': [
-                                          {'name':'stage','label':'Stage','count':32 },
-                                          {'name':'enseignement-cursus','label':'Enseignement Cursus','count':8 },
-                                          {'name':'action-diverse','label':'Action diverse','count':4 }
-                                         ]
+          $scope.onClick = function() {
+              $scope.facets = [
+                  {   'name' : 'formation',
+                      'label':'Formation',
+                      'type':'string',
+                      'items': [
+                          {'name':'stage','label':'Stage','count':32 },
+                          {'name':'enseignement-cursus','label':'Enseignement Cursus','count':8 },
+                          {'name':'action-diverse','label':'Action diverse','count':4 },
+                          {'name':'aqsdsqdse','label':'Action diqsdqsdverse','count':4 }
+                      ]
 
-                            },
-                            {   'name' : 'thematique',
-                                'label':'Thématique',
-                                'type':'string',
-                                'items': [
-                                    {'name':'Gestion de l\'information','count':8 },
-                                    {'name':'Production de données','count':7 },
-                                    {'name':'Licences des données','count':2 }
-                                ]
-                            },
-                            {   'name' : 'semestre',
-                                'label':'Semestre',
-                                'type':'string',
-                                'items': [
-                                    {'name':'1er','count':2 },
-                                    {'name':'2e','count':4 },
-                                    {'name':'3e','count':12 }
-                                ]
-                            },
-                          {   'name' : 'date',
-                              'label':'Date',
-                              'type':'date',
-                              'items': [
-                                  {'name':'2014/03/15','count':5 },
-                                  {'name':'2014/02/12','count':3 },
-                                  {'name':'2014/01/10','count':2 }
-                              ]
-                          },
-                          {   'name' : 'periode',
-                              'label':'Periode',
-                              'type':'periode',
-                              'items': [
-                                  {'name':'2014/03/15 - 2014/03/20','count':1 },
-                                  {'name':'2014/02/12 - 2014/02/20','count':1 },
-                                  {'name':'2014/01/10 - 2014/01/20','count':1 }
-                              ]
-                          }
-                  ];
+                  },
+                  {   'name' : 'thematique',
+                      'label':'Thématique',
+                      'type':'string',
+                      'items': [
+                          {'name':'Gestion de l\'information','count':8 },
+                          {'name':'Production de données','count':7 },
+                          {'name':'Licences des données','count':2 }
+                      ]
+                  },
+                  {   'name' : 'semestre',
+                      'label':'Semestre',
+                      'type':'string',
+                      'items': [
+                          {'name':'1er','count':2 },
+                          {'name':'2e','count':4 },
+                          {'name':'3e','count':12 }
+                      ]
+                  },
+                  {   'name' : 'date',
+                      'label':'Date',
+                      'type':'date',
+                      'items': [
+                          {'name':'2014/03/15','count':5 },
+                          {'name':'2014/02/12','count':3 },
+                          {'name':'2014/01/10','count':2 }
+                      ]
+                  },
+                  {   'name' : 'periode',
+                      'label':'Periode',
+                      'type':'periode',
+                      'items': [
+                          {'name':'2014/03/15 - 2014/03/20','count':1 },
+                          {'name':'2014/02/12 - 2014/02/20','count':1 },
+                          {'name':'2014/01/10 - 2014/01/20','count':1 }
+                      ]
+                  }
+              ];
+          };
       }
   </script>
 </body>

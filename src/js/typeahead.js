@@ -179,6 +179,24 @@ angular.module('angularjssearchbox.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcre
         if(limit) ngOptions += ' | limitTo:' + limit;
         var parsedOptions = $parseOptions(ngOptions);
 
+        var onWatch = function() {
+            parsedOptions = $parseOptions(ngOptions);
+            parsedOptions.valuesFn(scope, controller)
+                .then(function(values) {
+                    if(values.length > limit) values = values.slice(0, limit);
+                    // Do not re-queue an update if a correct value has been selected
+                    if(values.length === 1 && values[0].value === scope.$modelValue) return;
+                    typeahead.update(values);
+                    // Queue a new rendering that will leverage collection loading
+                    controller.$render();
+                });
+        }
+
+
+        if(attr.ngOptionsWatch) {
+            scope.$watch(attr.ngOptionsWatch, onWatch);
+        }
+
         // Initialize typeahead
         var typeahead = $typeahead(element, controller, options);
 
@@ -186,15 +204,7 @@ angular.module('angularjssearchbox.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcre
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
           // console.warn('$watch', element.attr('ng-model'), newValue);
           scope.$modelValue = newValue; // Publish modelValue on scope for custom templates
-          parsedOptions.valuesFn(scope, controller)
-          .then(function(values) {
-            if(values.length > limit) values = values.slice(0, limit);
-            // Do not re-queue an update if a correct value has been selected
-            if(values.length === 1 && values[0].value === newValue) return;
-            typeahead.update(values);
-            // Queue a new rendering that will leverage collection loading
-            controller.$render();
-          });
+          onWatch();
         });
 
         // Model rendering in view

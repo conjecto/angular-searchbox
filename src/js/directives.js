@@ -28,7 +28,14 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                 facetList: '=',
                 debug: '=?'
             },
-            controller: function($scope){
+            link: function(scope, elem, attrs){
+
+                scope.tmpInputValue = null;
+                scope.selectedResult = null;
+                scope.debug = scope.debug || false;
+                scope.useKeywordFacet = false;
+                scope.hasKeywordFacet = false;
+
 
                 function initFacetList(facetList){
                     for (var facet in facetList){
@@ -42,11 +49,11 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     return facetList;
                 }
                 function getValueLabel(facet,value){
-                    for (var filter in $scope.facetList){
-                        if($scope.facetList[filter].name === facet){
-                            for (var item in $scope.facetList[filter].items){
-                                if($scope.facetList[filter].items[item].name === value){
-                                    return $scope.facetList[filter].items[item].label;
+                    for (var filter in scope.facetList){
+                        if(scope.facetList[filter].name === facet){
+                            for (var item in scope.facetList[filter].items){
+                                if(scope.facetList[filter].items[item].name === value){
+                                    return scope.facetList[filter].items[item].label;
                                 }
                             }
                         }
@@ -64,21 +71,17 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     }
                     return rez;
                 }
-                $scope.facetList = initFacetList($scope.facetList);
-                $scope.sbResultList = initSbResult($scope.resultList);
-                $timeout(function(){
-                    $scope.selected = {key:"", value:""};
+
+                scope.$watch("facetList", function(facetList) {
+                    scope.sbFacetList = initFacetList(facetList);
+                    if(!scope.hasOwnProperty('selected')){
+                        scope.selected = {key:"", value:""};
+                    }
                 });
 
-            },
-            link: function(scope, elem, attrs){
-
-                scope.tmpInputValue = null;
-                scope.selectedResult = null;
-                scope.debug = scope.debug || false;
-                scope.useKeywordFacet = false;
-                scope.hasKeywordFacet = false;
-
+                scope.$watch("resultList", function(resultList) {
+                    scope.sbResultList = initSbResult(resultList);
+                });
 
                 var HOT_KEYS = [9, 13, 37, 39];
 
@@ -158,25 +161,25 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                 }
 
                 scope.getFacetLabel = function(key){
-                    for (var facet in scope.facetList){
-                        if(scope.facetList[facet].name == key)
-                            return scope.facetList[facet].label ;
+                    for (var facet in scope.sbFacetList){
+                        if(scope.sbFacetList[facet].name == key)
+                            return scope.sbFacetList[facet].label ;
                     }
                     return key;
                 }
 
                 scope.getValueName = function(key,index,label){
-                    for (var facet in scope.facetList){
-                        if(scope.facetList[facet].name == key)
-                            return scope.facetList[facet].items[index].name ;
+                    for (var facet in scope.sbFacetList){
+                        if(scope.sbFacetList[facet].name == key)
+                            return scope.sbFacetList[facet].items[index].name ;
                     }
                     return label;
                 }
 
                 scope.getValues = function (key){
-                    for (var facet in scope.facetList){
-                        if(scope.facetList[facet].name == key)
-                        return scope.facetList[facet].items ;
+                    for (var facet in scope.sbFacetList){
+                        if(scope.sbFacetList[facet].name == key)
+                        return scope.sbFacetList[facet].items ;
                     }
                     return [];
                 }
@@ -184,7 +187,6 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                 scope.$on('$typeahead.select',function (evt, value,index, tahIndex){
                     scope.$apply(function () {
                         scope.useKeywordFacet = false;
-//                        console.log(tahIndex);
                         if(tahIndex == -1){
                             //facet selection
                             scope.selected.value = "" ;
