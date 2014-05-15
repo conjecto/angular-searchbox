@@ -83,6 +83,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                             }
                         }
                     }
+                    return value;
                 }
                 function initSbResult(resultList){
                     var rez = [];
