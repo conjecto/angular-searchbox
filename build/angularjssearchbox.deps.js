@@ -173,10 +173,10 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                                 }
                                 scope.$apply(function () {
                                     var tmpFilter = new Object();
-                                    tmpFilter.key = scope.sbResultList[evt.srcElement.dataset.tahIndex].key;
-                                    tmpFilter.type = scope.sbResultList[evt.srcElement.dataset.tahIndex].type;
-                                    tmpFilter.value = scope.sbResultList[evt.srcElement.dataset.tahIndex].value;
-                                    scope.resultList[evt.srcElement.dataset.tahIndex] = tmpFilter;
+                                    tmpFilter.key = scope.sbResultList[evt.target.dataset.tahIndex].key;
+                                    tmpFilter.type = scope.sbResultList[evt.target.dataset.tahIndex].type;
+                                    tmpFilter.value = scope.sbResultList[evt.target.dataset.tahIndex].value;
+                                    scope.resultList[evt.target.dataset.tahIndex] = tmpFilter;
                                     scope.selectInputFacet();
                                     scope.selectedResult = null;
                                 });
