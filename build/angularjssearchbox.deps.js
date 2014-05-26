@@ -34,7 +34,7 @@
 
 /* Directives */
 
-angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
+angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRange']).
    directive('sbFocus', ['$timeout', function($timeout){
         return function(scope, element){
             $timeout(function() {
@@ -58,7 +58,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
             scope: {
                 resultList: '=',
                 facetList: '=',
-                debug: '=?'
+                debug: '=?',
+                dateOptions: '=?'
             },
             link: function(scope, elem, attrs){
 
@@ -67,8 +68,71 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                 scope.debug = scope.debug || false;
                 scope.useKeywordFacet = false;
                 scope.hasKeywordFacet = false;
+                scope.toDay = moment().format('DD/MM/YYYY');
+
+                scope.dateOptions = scope.dateOptions || {
+                    minDate: '01/01/2004',
+                    maxDate: moment().add('years', 2),
+                    showDropdowns: true,
+                    showWeekNumbers: false,
+                    timePicker: false,
+                    timePickerIncrement: 1,
+                    timePicker12Hour: false,
+                    ranges: {
+                        'Aujourd\'hui': [moment(), moment()],
+                        'Semestre en cours': (moment().get('month')<6 ? [moment().startOf('year'), moment().startOf('year').add('months', 6).subtract('days', 1)]:[moment().startOf('year').add('months', 6), moment().endOf('year')]),
+                        'Prochain Semestre': (moment().get('month')<6 ? [moment().startOf('year').add('months', 6), moment().endOf('year')]:[moment().startOf('year').add('years', 1), moment().endOf('year').add('months', 6)]),
+                        'Mois dernier': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                        'Mois c +1 ': [moment().startOf('month'), moment().add('month', 1).endOf('month')]
+                    },
+                    opens: 'right',
+                    buttonClasses: ['btn btn-default'],
+                    applyClass: 'btn-small btn-primary',
+                    cancelClass: 'btn-small',
+                    format: 'DD/MM/YYYY',
+                    separator: ' - ',
+                    singleDatePicker: false,
+                    locale: {
+                        applyLabel: 'Valider',
+                        cancelLabel: 'Annuler',
+                        fromLabel: 'Du',
+                        toLabel: 'Au',
+                        customRangeLabel: 'Calendrier',
+                        daysOfWeek: ['Di','Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+                        monthNames: ['Janvier', 'F&eacute;vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao&ucirc;t', 'Septembre', 'Octobre', 'Novembre', 'D&eacute;cembre'],
+                        firstDay: 1
+                    }
+                };
 
 
+                scope.dateOptionsDate = angular.copy(scope.dateOptions);
+                scope.dateOptionsDate.singleDatePicker = true;
+                scope.dateOptionsRange = angular.copy(scope.dateOptions);
+
+                scope.changeEventDateRange = function(start, end, label) {
+                    var value = this.element['context'].value;
+                    var tahIndex = this.element[0].attributes[1].value;
+                    scope.sbResultList[tahIndex].value = value;
+                    $timeout(function() {
+                        if(scope.hasKeywordFacet){
+                            if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
+                                var tmp = scope.sbResultList.pop();
+                                scope.sbResultList.splice(scope.sbResultList.length-1,0, tmp);
+                                tahIndex += -1;
+                            }
+                        }
+                        var tmpFilter = new Object();
+                        tmpFilter.key = scope.sbResultList[tahIndex].key;
+                        tmpFilter.type = scope.sbResultList[tahIndex].type;
+                        tmpFilter.value = value;
+                        scope.resultList[tahIndex] = tmpFilter;
+                        scope.selectInputFacet();
+                        scope.selectedResult = null;
+                    },100);
+
+                }
+
+                // add label to item if not exist
                 function initFacetList(facetList){
                     for (var facet in facetList){
                         for (var item in facetList[facet].items){
@@ -80,6 +144,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     }
                     return facetList;
                 }
+
+                // give label of a value, return the value if not exist
                 function getValueLabel(facet,value){
                     for (var filter in scope.facetList){
                         if(scope.facetList[filter].name === facet){
@@ -92,12 +158,24 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     }
                     return value;
                 }
+
+                // give type of a facet, return string if not exist
+                function getFacetType(facet){
+                    for (var filter in scope.facetList){
+                        if(scope.facetList[filter].name === facet){
+                            return scope.facetList[filter].type;
+                        }
+                    }
+                    return 'string';
+                }
+
+                // create sbResultList with type on filter
                 function initSbResult(resultList){
                     var rez = [];
                     for (var filter in resultList){
                         var tmpFilter = new Object();
                         tmpFilter.key = resultList[filter].key;
-                        tmpFilter.type = "string";
+                        tmpFilter.type = getFacetType(tmpFilter.key);
                         tmpFilter.value = getValueLabel(tmpFilter.key,resultList[filter].value);
                         rez.push(tmpFilter);
                     }
@@ -106,6 +184,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
 
                 scope.$watch("facetList", function(facetList) {
                     scope.sbFacetList = initFacetList(facetList);
+                    scope.sbResultList = initSbResult(scope.resultList);
+
                     if(!scope.hasOwnProperty('selected')){
                         scope.selected = {key:"", value:""};
                     }
@@ -154,6 +234,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     }
                 });
 
+                //bind keyboard events: enter(13) and tab(9) on value Input
                 scope.bindValueInput = function(inputElem){
                     $timeout(function () {
                         inputElem.find('input').bind('keydown', function (evt) {
@@ -187,6 +268,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     });
                 }
 
+                // help to focus the input facet
                 scope.selectInputFacet = function(){
                     elem.find('input')[elem.find('input').length-1].focus();
                 }
@@ -199,6 +281,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     return key;
                 }
 
+                // return the value of a label
                 scope.getValueName = function(key,index,label){
                     for (var facet in scope.sbFacetList){
                         if(scope.sbFacetList[facet].name == key)
@@ -207,6 +290,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     return label;
                 }
 
+                // return all items of a facet
                 scope.getValues = function (key){
                     for (var facet in scope.sbFacetList){
                         if(scope.sbFacetList[facet].name == key)
@@ -215,7 +299,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     return [];
                 }
 
-                scope.$on('$typeahead.select',function (evt, value,index, tahIndex){
+                // handle selection with the sbTypeAhead directive (tahIndex is the $index in the ngRepeat)
+                scope.$on('$typeahead.select',function (evt, value, index, tahIndex){
                     scope.$apply(function () {
                         scope.useKeywordFacet = false;
                         if(tahIndex == -1){
@@ -245,10 +330,12 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     });
                 });
 
+                // select filter (facet + value)
                 scope.selectResult = function (index){
                     scope.selectedResult = index ;
                 }
 
+                // remove filter (facet + value)
                 scope.removeFilter = function ($index){
                     if(scope.sbResultList[$index].key === "text"){
                         scope.hasKeywordFacet = false;
@@ -257,6 +344,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     scope.resultList = scope.sbResultList.slice(0);
                 }
 
+                // clean all the filters
                 scope.removeAll = function (){
                     scope.hasKeywordFacet = false;
                     scope.sbResultList.length = 0;
@@ -497,5 +585,5 @@ angular.module('angularjssearchbox.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcre
 
   });
 
-angular.module("angularjssearchbox").run(["$templateCache", function($templateCache) {$templateCache.put("templates/searchBox.html","<pre ng-show=\"debug\">Model: {{selected.key | json}} Value : {{ selected.value | json}} opened : {{ opened }}</pre>\r\n<div class=\"SB-search\">\r\n    <div class=\"SB-search-box-wrapper form-control SB-search-box \" >\r\n        <div class=\"SB-icon SB-icon-search\"><span class=\"glyphicon glyphicon-search\"></span></div>\r\n        <div class=\"SB-placeholder\" ng-click=\"selectInputFacet()\"></div>\r\n        <div class=\"SB-search-inner\" >\r\n            <div class=\"search_parameter\" ng-class=\"{ selected : $index == selectedResult }\"\r\n                 ng-repeat=\"parameter in sbResultList\" ng-click=\"selectResult($index)\"\r\n                 repeat-done>\r\n                <div class=\"search_parameter_remove SB-icon SB-icon-cancel\" ng-click=\"removeFilter($index)\"><span class=\"glyphicon glyphicon-remove\"></span></div>\r\n                <div class=\"key\">{{ getFacetLabel(parameter.key) }}</div>\r\n                <div class=\"value\" ><span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\r\n                <input type=\"text\"\r\n                       data-tah-index=\"{{ $index }}\"\r\n                       ng-model=\"parameter.value\"\r\n                       ng-if=\"(parameter.type == null || parameter.type == \'string\')\"\r\n                       class=\"form-control SB-inputValue\"\r\n                       limit=\"8\"\r\n                       data-trigger=\"focus\"\r\n                       data-min-length=\"0\"\r\n                       data-container=\"body\"\r\n                       ng-options=\"element.label as element.label + \' (\' +element.count+\')\' for element in getValues(parameter.key) | filter:{label:$viewValue}\"\r\n                       sb-focus sb-typeahead ng-options-watch=\"sbFacetList\">\r\n                </div>\r\n            </div>\r\n            <div class=\"search_parameter input-facet\">\r\n            <input\r\n                   data-min-length=\"0\"\r\n                   type=\"text\"\r\n                   ng-model=\"selected.key\"\r\n                   data-limit=\"30\"\r\n                   data-trigger=\"focus\"\r\n                   data-container=\"body\"\r\n                   data-delay=\"{ show: 500, hide: 0 }\"\r\n                   ng-options=\"element as element.label for element in sbFacetList | filter:{label:$viewValue}\"\r\n                   class=\"form-control\" sb-typeahead ng-options-watch=\"sbFacetList\">\r\n            </div>\r\n\r\n        </div>\r\n        <div class=\"SB-icon SB-icon-cancel SB-cancel-search-box\" title=\"clear search\" ng-click=\"removeAll()\"><span class=\"glyphicon glyphicon-remove-circle\"></span></div>\r\n    </div>\r\n</div>\r\n<pre ng-show=\"debug\" style=\"margin-top: 10px;\">sbResultList: {{sbResultList | json}} </pre>\r\n<pre ng-show=\"debug\">resultList (input/output): {{resultList | json}} </pre>\r\n<pre ng-show=\"debug\">sbFacetList (input): {{sbFacetList | json}} </pre>\r\n");
+angular.module("angularjssearchbox").run(["$templateCache", function($templateCache) {$templateCache.put("templates/searchBox.html","<pre ng-show=\"debug\">Model: {{selected.key | json}} Value : {{ selected.value | json}} opened : {{ opened }}</pre>\r\n<div class=\"SB-search\">\r\n    <div class=\"SB-search-box-wrapper form-control SB-search-box \" >\r\n        <div class=\"SB-icon SB-icon-search\"><span class=\"glyphicon glyphicon-search\"></span></div>\r\n        <div class=\"SB-placeholder\" ng-click=\"selectInputFacet()\"></div>\r\n        <div class=\"SB-search-inner\" >\r\n            <div class=\"search_parameter\" ng-class=\"{ selected : $index == selectedResult }\"\r\n                 ng-repeat=\"parameter in sbResultList\" ng-click=\"selectResult($index)\"\r\n                 repeat-done>\r\n                <div class=\"search_parameter_remove SB-icon SB-icon-cancel\" ng-click=\"removeFilter($index)\"><span class=\"glyphicon glyphicon-remove\"></span></div>\r\n                <div class=\"key\">{{ getFacetLabel(parameter.key) }}</div>\r\n                <div class=\"value\"  ng-if=\"(parameter.type == null || parameter.type == \'string\')\"><span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\r\n                <input type=\"text\"\r\n                       data-tah-index=\"{{ $index }}\"\r\n                       ng-model=\"parameter.value\"\r\n\r\n                       class=\"form-control SB-inputValue\"\r\n                       limit=\"8\"\r\n                       data-trigger=\"focus\"\r\n                       data-min-length=\"0\"\r\n                       data-container=\"body\"\r\n                       ng-options=\"element.label as element.label + \' (\' +element.count+\')\' for element in getValues(parameter.key) | filter:{label:$viewValue}\"\r\n                       sb-focus sb-typeahead ng-options-watch=\"sbFacetList\">\r\n                </div>\r\n                <div class=\"input-append input-group value\" ng-if=\"parameter.type == \'date\'\">\r\n                    <span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\r\n                    <input type=\"text\"\r\n                           data-tah-index=\"{{ $index }}\"\r\n                           ng-model=\"parameter.value\"\r\n                           ng-if=\"parameter.type == \'date\'\"\r\n                           class=\"form-control SB-inputValue\"\r\n                           value=\"{{ parameter.value || toDay }}\"\r\n                           date-range\r\n                           date-range-options=\"dateOptionsDate\"\r\n                           date-range-change=\"changeEventDateRange\"\r\n                           sb-focus >\r\n                </div>\r\n                <div class=\"input-append input-group value\" ng-if=\"parameter.type == \'range\'\">\r\n                    <span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\r\n                    <input type=\"text\"\r\n                           data-tah-index=\"{{ $index }}\"\r\n                           ng-model=\"parameter.value\"\r\n                           ng-if=\"parameter.type == \'range\'\"\r\n                           class=\"form-control SB-inputValue\"\r\n                           value=\"{{ parameter.value || toDay }}\"\r\n                           date-range\r\n                           date-range-options=\"dateOptionsRange\"\r\n                           date-range-change=\"changeEventDateRange\"\r\n                           sb-focus >\r\n                </div>\r\n                <div class=\"input-append input-group value\" ng-if=\"parameter.type == \'dateOrRange\'\">\r\n                    <span class=\"SB-inputSizer tgdaterange\" >{{ parameter.value }}</span>\r\n                    <input type=\"text\"\r\n                           data-tah-index=\"{{ $index }}\"\r\n                           ng-model=\"parameter.value\"\r\n                           ng-if=\"parameter.type == \'dateOrRange\'\"\r\n                           class=\"form-control SB-inputValue\"\r\n                           value=\"{{ parameter.value || toDay}}\"\r\n                           date-range\r\n                           date-range-options=\"dateOptions\"\r\n                           date-range-tbutton=\"true\"\r\n                           date-range-change=\"changeEventDateRange\"\r\n                           sb-focus >\r\n                </div>\r\n            </div>\r\n            </div>\r\n            <div class=\"search_parameter input-facet\">\r\n            <input\r\n                   data-min-length=\"0\"\r\n                   type=\"text\"\r\n                   ng-model=\"selected.key\"\r\n                   data-limit=\"30\"\r\n                   data-trigger=\"focus\"\r\n                   data-container=\"body\"\r\n                   data-delay=\"{ show: 500, hide: 0 }\"\r\n                   ng-options=\"element as element.label for element in sbFacetList | filter:{label:$viewValue}\"\r\n                   class=\"form-control\" sb-typeahead ng-options-watch=\"sbFacetList\">\r\n            </div>\r\n\r\n        </div>\r\n        <div class=\"SB-icon SB-icon-cancel SB-cancel-search-box\" title=\"clear search\" ng-click=\"removeAll()\"><span class=\"glyphicon glyphicon-remove-circle\"></span></div>\r\n    </div>\r\n</div>\r\n<pre ng-show=\"debug\" style=\"margin-top: 10px;\">sbResultList: {{sbResultList | json}} </pre>\r\n<pre ng-show=\"debug\">resultList (input/output): {{resultList | json}} </pre>\r\n<pre ng-show=\"debug\">sbFacetList (input): {{sbFacetList | json}} </pre>\r\n");
 $templateCache.put("templates/typeAhead.html","<ul tabindex=\"-1\" class=\"typeahead dropdown-menu\" ng-show=\"$isVisible()\" role=\"select\">\n  <li role=\"presentation\" ng-repeat=\"match in $matches\" ng-class=\"{active: $index == $activeIndex}\">\n    <a role=\"menuitem\" tabindex=\"-1\" ng-click=\"$select($index, $event)\" ng-bind=\"match.label\"></a>\n  </li>\n</ul>\n");}]);

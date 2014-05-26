@@ -2,7 +2,7 @@
 
 /* Directives */
 
-angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
+angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRange']).
    directive('sbFocus', ['$timeout', function($timeout){
         return function(scope, element){
             $timeout(function() {
@@ -26,7 +26,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
             scope: {
                 resultList: '=',
                 facetList: '=',
-                debug: '=?'
+                debug: '=?',
+                dateOptions: '=?'
             },
             link: function(scope, elem, attrs){
 
@@ -35,6 +36,69 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                 scope.debug = scope.debug || false;
                 scope.useKeywordFacet = false;
                 scope.hasKeywordFacet = false;
+                scope.toDay = moment().format('DD/MM/YYYY');
+
+                scope.dateOptions = scope.dateOptions || {
+                    minDate: '01/01/2004',
+                    maxDate: moment().add('years', 2),
+                    showDropdowns: true,
+                    showWeekNumbers: false,
+                    timePicker: false,
+                    timePickerIncrement: 1,
+                    timePicker12Hour: false,
+                    ranges: {
+                        'Aujourd\'hui': [moment(), moment()],
+                        'Semestre en cours': (moment().get('month')<6 ? [moment().startOf('year'), moment().startOf('year').add('months', 6).subtract('days', 1)]:[moment().startOf('year').add('months', 6), moment().endOf('year')]),
+                        'Prochain Semestre': (moment().get('month')<6 ? [moment().startOf('year').add('months', 6), moment().endOf('year')]:[moment().startOf('year').add('years', 1), moment().endOf('year').add('months', 6)]),
+                        'Mois dernier': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                        'Mois c +1 ': [moment().startOf('month'), moment().add('month', 1).endOf('month')]
+                    },
+                    opens: 'right',
+                    buttonClasses: ['btn btn-default'],
+                    applyClass: 'btn-small btn-primary',
+                    cancelClass: 'btn-small',
+                    format: 'DD/MM/YYYY',
+                    separator: ' - ',
+                    singleDatePicker: false,
+                    locale: {
+                        applyLabel: 'Valider',
+                        cancelLabel: 'Annuler',
+                        fromLabel: 'Du',
+                        toLabel: 'Au',
+                        customRangeLabel: 'Calendrier',
+                        daysOfWeek: ['Di','Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+                        monthNames: ['Janvier', 'F&eacute;vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao&ucirc;t', 'Septembre', 'Octobre', 'Novembre', 'D&eacute;cembre'],
+                        firstDay: 1
+                    }
+                };
+
+
+                scope.dateOptionsDate = angular.copy(scope.dateOptions);
+                scope.dateOptionsDate.singleDatePicker = true;
+                scope.dateOptionsRange = angular.copy(scope.dateOptions);
+
+                scope.changeEventDateRange = function(start, end, label) {
+                    var value = this.element['context'].value;
+                    var tahIndex = this.element[0].attributes[1].value;
+                    scope.sbResultList[tahIndex].value = value;
+                    $timeout(function() {
+                        if(scope.hasKeywordFacet){
+                            if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
+                                var tmp = scope.sbResultList.pop();
+                                scope.sbResultList.splice(scope.sbResultList.length-1,0, tmp);
+                                tahIndex += -1;
+                            }
+                        }
+                        var tmpFilter = new Object();
+                        tmpFilter.key = scope.sbResultList[tahIndex].key;
+                        tmpFilter.type = scope.sbResultList[tahIndex].type;
+                        tmpFilter.value = value;
+                        scope.resultList[tahIndex] = tmpFilter;
+                        scope.selectInputFacet();
+                        scope.selectedResult = null;
+                    },100);
+
+                }
 
                 // add label to item if not exist
                 function initFacetList(facetList){
@@ -63,13 +127,23 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
                     return value;
                 }
 
+                // give type of a facet, return string if not exist
+                function getFacetType(facet){
+                    for (var filter in scope.facetList){
+                        if(scope.facetList[filter].name === facet){
+                            return scope.facetList[filter].type;
+                        }
+                    }
+                    return 'string';
+                }
+
                 // create sbResultList with type on filter
                 function initSbResult(resultList){
                     var rez = [];
                     for (var filter in resultList){
                         var tmpFilter = new Object();
                         tmpFilter.key = resultList[filter].key;
-                        tmpFilter.type = "string";
+                        tmpFilter.type = getFacetType(tmpFilter.key);
                         tmpFilter.value = getValueLabel(tmpFilter.key,resultList[filter].value);
                         rez.push(tmpFilter);
                     }
@@ -78,6 +152,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
 
                 scope.$watch("facetList", function(facetList) {
                     scope.sbFacetList = initFacetList(facetList);
+                    scope.sbResultList = initSbResult(scope.resultList);
+
                     if(!scope.hasOwnProperty('selected')){
                         scope.selected = {key:"", value:""};
                     }

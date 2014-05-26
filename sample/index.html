@@ -10,26 +10,64 @@
 
 
 
-
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="../bower_components/angular/angular.js"></script>
   <script src="../bower_components/angular-strap/dist/angular-strap.js"></script>
   <script src="../bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
 
-
+    <!--<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="moment.js"></script>
+    <script type="text/javascript" src="daterangepicker.js"></script>
+    <script type="text/javascript" src="ngdaterangepicker.js"></script>
   <script src="../build/angularjssearchbox.js"></script>
   <script src="../build/angularjssearchbox.tpl.js"></script>
+
   <script src="app.js"></script>
 </head>
 <body >
 
     <div style="width:800px;height:100px;margin:50px auto;" class='container-fluid' ng-controller="TestSearchBox">
-        <div search-box result-list="parameters" facet-list="facets" debug="true"></div>
         <button ng-click="onClick()">Ajouter facettes</button>
+        <div search-box result-list="parameters" facet-list="facets" date-options="customOptions" debug="true"></div>
+
     </div>
 
   <script>
       function TestSearchBox($scope){
-          $scope.parameters = [{'key':'formation','type':'string','value':'stage'},{'key':'hhsg','value':'hsdhh'}];
+          $scope.parameters = [{'key':'formation','type':'string','value':'stage'},{'key':'thematique','value':'gestion-information'},{'key':'date','value':'12/02/2014'},{'key':'mixed-date-range','value':'12/02/2014 - 13/03/2014'}];
+          $scope.customOptions = {
+              minDate: '01/01/2004',
+              maxDate: moment().add('years', 2),
+              showDropdowns: true,
+              showWeekNumbers: false,
+              timePicker: false,
+              timePickerIncrement: 1,
+              timePicker12Hour: false,
+              ranges: {
+                  'Aujourd\'hui': [moment(), moment()],
+                  'Semestre en cours': (moment().get('month')<6 ? [moment().startOf('year'), moment().startOf('year').add('months', 6).subtract('days', 1)]:[moment().startOf('year').add('months', 6), moment().endOf('year')]),
+                  'Prochain Semestre': (moment().get('month')<6 ? [moment().startOf('year').add('months', 6), moment().endOf('year')]:[moment().startOf('year').add('years', 1), moment().endOf('year').add('months', 6)]),
+                  'Mois dernier': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                  'Mois c +1 ': [moment().startOf('month'), moment().add('month', 1).endOf('month')]
+              },
+              opens: 'right',
+              buttonClasses: ['btn btn-default'],
+              applyClass: 'btn-small btn-primary',
+              cancelClass: 'btn-small',
+              format: 'DD/MM/YYYY',
+              separator: ' - ',
+              singleDatePicker: false,
+              locale: {
+                  applyLabel: 'Valider',
+                  cancelLabel: 'Annuler',
+                  fromLabel: 'Du',
+                  toLabel: 'Au',
+                  customRangeLabel: 'Calendrier',
+                  daysOfWeek: ['Di','Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+                  monthNames: ['Janvier', 'F&eacute;vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao&ucirc;t', 'Septembre', 'Octobre', 'Novembre', 'D&eacute;cembre'],
+                  firstDay: 1
+              }
+          };
           $scope.facets = [{   'name' : 'formation',
               'label':'Formation',
               'type':'string',
@@ -39,7 +77,34 @@
                   {'name':'action-diverse','label':'Action diverse','count':4 }
               ]
 
-          }];
+          },
+              {   'name' : 'periode',
+                  'label':'Periode',
+                  'type':'range',
+                  'items': [
+                      {'name':'15/03/2014 - 16/03/2014','count':1 },
+                      {'name':'12/02/2014 - 16/03/2014','count':1 },
+                      {'name':'15/04/2014 - 16/04/2014','count':1 }
+                  ]
+              },
+              {   'name' : 'date',
+                  'label':'Date',
+                  'type':'date',
+                  'items': [
+                      {'name':'15/03/2014','count':1 },
+                      {'name':'12/02/2014','count':1 },
+                      {'name':'15/04/2014','count':1 }
+                  ]
+              },
+              {   'name' : 'mixed-date-range',
+                  'label':'Date ou Periode',
+                  'type':'dateOrRange',
+                  'items': [
+                      {'name':'15/03/2014 - 16/03/2014','count':1 },
+                      {'name':'12/02/2014','count':1 },
+                      {'name':'15/04/2014 - 16/07/2014','count':1 }
+                  ]
+              }];
 
           $scope.onClick = function() {
               $scope.facets = [
@@ -58,7 +123,7 @@
                       'label':'Thématique',
                       'type':'string',
                       'items': [
-                          {'name':'Gestion de l\'information','count':8 },
+                          {'name':'gestion-information','label':'Gestion de l\'information','count':8 },
                           {'name':'Production de données','count':7 },
                           {'name':'Licences des données','count':2 }
                       ]
@@ -83,11 +148,11 @@
                   },
                   {   'name' : 'periode',
                       'label':'Periode',
-                      'type':'periode',
+                      'type':'date',
                       'items': [
-                          {'name':'2014/03/15 - 2014/03/20','count':1 },
-                          {'name':'2014/02/12 - 2014/02/20','count':1 },
-                          {'name':'2014/01/10 - 2014/01/20','count':1 }
+                          {'name':'15/03/2014 - 16/03/2014','count':1 },
+                          {'name':'12/02/2014','count':1 },
+                          {'name':'15/04/2014 - 16/04/2014','count':1 }
                       ]
                   }
               ];
