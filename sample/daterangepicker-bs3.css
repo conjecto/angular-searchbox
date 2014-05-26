@@ -268,9 +268,3 @@
 .daterangepicker select.monthselect {
 width: 60%;
 }
-.SB-addon{
-
-    padding:3px;
-    position:relative;
-    z-index:10;
-}

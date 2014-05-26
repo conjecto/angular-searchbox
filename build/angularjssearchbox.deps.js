@@ -83,7 +83,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         'Semestre en cours': (moment().get('month')<6 ? [moment().startOf('year'), moment().startOf('year').add('months', 6).subtract('days', 1)]:[moment().startOf('year').add('months', 6), moment().endOf('year')]),
                         'Prochain Semestre': (moment().get('month')<6 ? [moment().startOf('year').add('months', 6), moment().endOf('year')]:[moment().startOf('year').add('years', 1), moment().endOf('year').add('months', 6)]),
                         'Mois dernier': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                        'Mois c +1 ': [moment().startOf('month'), moment().add('month', 1).endOf('month')]
+                        '3 prochains mois': [moment().startOf('month'), moment().add('month', 3).endOf('month')]
                     },
                     opens: 'right',
                     buttonClasses: ['btn btn-default'],

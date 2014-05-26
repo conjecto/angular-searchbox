@@ -92,6 +92,14 @@
     min-width: 50px;
 }
 
+/* ========================================= */
+/* = Bootsrap addon (datpicker and others) = */
+/* ========================================= */
+.SB-addon{
+    padding:3px;
+    position:relative;
+    z-index:10;
+}
 
 /* ================ */
 /* = Search Facet = */
