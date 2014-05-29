@@ -3529,7 +3529,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
 
                 scope.changeEventDateRange = function(start, end, label) {
                     var value = this.element['context'].value;
-                    var tahIndex = this.element[0].attributes[1].value;
+                    var tahIndex = this.element[0].attributes['data-tah-index'].value;
                     scope.sbResultList[tahIndex].value = value;
                     $timeout(function() {
                         if(scope.hasKeywordFacet){
@@ -3784,12 +3784,13 @@ angular.module('ngDateRange', [])
             scope: {
                 dateRangeChange: '=',
                 dateRangeOptions: '=',
-                tahIndex: '@',
+                tahIndex: '@?',
                 dateRangeTbutton: '=?'
             },
             template:'<span class="SB-addon" ng-if="dateRangeTbutton" ng-click="toggleSingleDate()"><i class="glyphicon glyphicon-calendar fa fa-calendar" ></i>&nbsp;<i class="glyphicon glyphicon-calendar fa fa-calendar" ng-hide="hideRange"></i></span>',
             link: function (scope, element, attrs) {
                 scope.dateRangeTbutton = scope.dateRangeTbutton || false;
+                scope.tahIndex = scope.tahIndex || 0;
                 if(scope.dateRangeTbutton){
                     if(attrs.value.indexOf('-')>-1){
                         scope.dateRangeOptions.singleDatePicker=false;

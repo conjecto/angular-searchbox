@@ -3497,7 +3497,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
 
                 scope.changeEventDateRange = function(start, end, label) {
                     var value = this.element['context'].value;
-                    var tahIndex = this.element[0].attributes[1].value;
+                    var tahIndex = this.element[0].attributes['data-tah-index'].value;
                     scope.sbResultList[tahIndex].value = value;
                     $timeout(function() {
                         if(scope.hasKeywordFacet){
