@@ -1,5 +1,5 @@
 'use strict';
-angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).provider('$tooltip', function () {
+angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).provider('$sbtooltip', function () {
   var defaults = this.defaults = {
       animation: 'am-fade',
       prefixClass: 'tooltip',
@@ -32,41 +32,41 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
       var isTouch = 'createTouch' in $window.document;
       var htmlReplaceRegExp = /ng-bind="/gi;
       function TooltipFactory(element, config) {
-        var $tooltip = {};
+        var $sbtooltip = {};
         // Common vars
         var nodeName = element[0].nodeName.toLowerCase();
-        var options = $tooltip.$options = angular.extend({}, defaults, config);
-        $tooltip.$promise = fetchTemplate(options.template);
-        var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+        var options = $sbtooltip.$options = angular.extend({}, defaults, config);
+        $sbtooltip.$promise = fetchTemplate(options.template);
+        var scope = $sbtooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if (options.delay && angular.isString(options.delay)) {
           options.delay = parseFloat(options.delay);
         }
         // Support scope as string options
         if (options.title) {
-          $tooltip.$scope.title = options.title;
+          $sbtooltip.$scope.title = options.title;
         }
         // Provide scope helpers
         scope.$hide = function () {
           scope.$$postDigest(function () {
-            $tooltip.hide();
+            $sbtooltip.hide();
           });
         };
         scope.$show = function () {
           scope.$$postDigest(function () {
-            $tooltip.show();
+            $sbtooltip.show();
           });
         };
         scope.$toggle = function () {
           scope.$$postDigest(function () {
-            $tooltip.toggle();
+            $sbtooltip.toggle();
           });
         };
-        $tooltip.$isShown = scope.$isShown = false;
+        $sbtooltip.$isShown = scope.$isShown = false;
         // Private vars
         var timeout, hoverState;
         // Support contentTemplate option
         if (options.contentTemplate) {
-          $tooltip.$promise = $tooltip.$promise.then(function (template) {
+          $sbtooltip.$promise = $sbtooltip.$promise.then(function (template) {
             var templateEl = angular.element(template);
             return fetchTemplate(options.contentTemplate).then(function (contentTemplate) {
               var contentEl = findElement('[ng-bind="content"]', templateEl[0]);
@@ -79,7 +79,7 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
         }
         // Fetch, compile then initialize tooltip
         var tipLinker, tipElement, tipTemplate, tipContainer;
-        $tooltip.$promise.then(function (template) {
+        $sbtooltip.$promise.then(function (template) {
           if (angular.isObject(template))
             template = template.data;
           if (options.html)
@@ -87,9 +87,9 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
           template = trim.apply(template);
           tipTemplate = template;
           tipLinker = $compile(template);
-          $tooltip.init();
+          $sbtooltip.init();
         });
-        $tooltip.init = function () {
+        $sbtooltip.init = function () {
           // Options: delay
           if (options.delay && angular.isNumber(options.delay)) {
             options.delay = {
@@ -111,31 +111,31 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
           var triggers = options.trigger.split(' ');
           angular.forEach(triggers, function (trigger) {
             if (trigger === 'click') {
-              element.on('click', $tooltip.toggle);
+              element.on('click', $sbtooltip.toggle);
             } else if (trigger !== 'manual') {
-              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $sbtooltip.enter);
+              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $sbtooltip.leave);
+              nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $sbtooltip.$onFocusElementMouseDown);
             }
           });
           // Options: show
           if (options.show) {
             scope.$$postDigest(function () {
-              options.trigger === 'focus' ? element[0].focus() : $tooltip.show();
+              options.trigger === 'focus' ? element[0].focus() : $sbtooltip.show();
             });
           }
         };
-        $tooltip.destroy = function () {
+        $sbtooltip.destroy = function () {
           // Unbind events
           var triggers = options.trigger.split(' ');
           for (var i = triggers.length; i--;) {
             var trigger = triggers[i];
             if (trigger === 'click') {
-              element.off('click', $tooltip.toggle);
+              element.off('click', $sbtooltip.toggle);
             } else if (trigger !== 'manual') {
-              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              nodeName === 'button' && trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $sbtooltip.enter);
+              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $sbtooltip.leave);
+              nodeName === 'button' && trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $sbtooltip.$onFocusElementMouseDown);
             }
           }
           // Remove element
@@ -146,26 +146,26 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
           // Destroy scope
           scope.$destroy();
         };
-        $tooltip.enter = function () {
+        $sbtooltip.enter = function () {
           clearTimeout(timeout);
           hoverState = 'in';
           if (!options.delay || !options.delay.show) {
-            return $tooltip.show();
+            return $sbtooltip.show();
           }
           timeout = setTimeout(function () {
             if (hoverState === 'in')
-              $tooltip.show();
+              $sbtooltip.show();
           }, options.delay.show);
         };
-        $tooltip.show = function () {
-          scope.$emit(options.prefixEvent + '.show.before', $tooltip);
+        $sbtooltip.show = function () {
+          scope.$emit(options.prefixEvent + '.show.before', $sbtooltip);
           var parent = options.container ? tipContainer : null;
           var after = options.container ? null : element;
           // Hide any existing tipElement
           if (tipElement)
             tipElement.remove();
           // Fetch a cloned element linked from template
-          tipElement = $tooltip.$element = tipLinker(scope, function (clonedElement, scope) {
+          tipElement = $sbtooltip.$element = tipLinker(scope, function (clonedElement, scope) {
           });
           // Set the initial positioning.
           tipElement.css({
@@ -180,60 +180,60 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
           if (options.type)
             tipElement.addClass(options.prefixClass + '-' + options.type);
           $animate.enter(tipElement, parent, after, function () {
-            scope.$emit(options.prefixEvent + '.show', $tooltip);
+            scope.$emit(options.prefixEvent + '.show', $sbtooltip);
           });
-          $tooltip.$isShown = scope.$isShown = true;
+          $sbtooltip.$isShown = scope.$isShown = true;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
-          $$rAF($tooltip.$applyPlacement);
+          $$rAF($sbtooltip.$applyPlacement);
           // var a = bodyEl.offsetWidth + 1; ?
           // Bind events
           if (options.keyboard) {
             if (options.trigger !== 'focus') {
-              $tooltip.focus();
-              tipElement.on('keyup', $tooltip.$onKeyUp);
+              $sbtooltip.focus();
+              tipElement.on('keyup', $sbtooltip.$onKeyUp);
             } else {
-              element.on('keyup', $tooltip.$onFocusKeyUp);
+              element.on('keyup', $sbtooltip.$onFocusKeyUp);
             }
           }
         };
-        $tooltip.leave = function () {
+        $sbtooltip.leave = function () {
           clearTimeout(timeout);
           hoverState = 'out';
           if (!options.delay || !options.delay.hide) {
-            return $tooltip.hide();
+            return $sbtooltip.hide();
           }
           timeout = setTimeout(function () {
             if (hoverState === 'out') {
-              $tooltip.hide();
+              $sbtooltip.hide();
             }
           }, options.delay.hide);
         };
-        $tooltip.hide = function (blur) {
-          if (!$tooltip.$isShown)
+        $sbtooltip.hide = function (blur) {
+          if (!$sbtooltip.$isShown)
             return;
-          scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
+          scope.$emit(options.prefixEvent + '.hide.before', $sbtooltip);
           $animate.leave(tipElement, function () {
-            scope.$emit(options.prefixEvent + '.hide', $tooltip);
+            scope.$emit(options.prefixEvent + '.hide', $sbtooltip);
           });
-          $tooltip.$isShown = scope.$isShown = false;
+          $sbtooltip.$isShown = scope.$isShown = false;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
           // Unbind events
           if (options.keyboard && tipElement !== null) {
-            tipElement.off('keyup', $tooltip.$onKeyUp);
+            tipElement.off('keyup', $sbtooltip.$onKeyUp);
           }
           // Allow to blur the input when hidden, like when pressing enter key
           if (blur && options.trigger === 'focus') {
             return element[0].blur();
           }
         };
-        $tooltip.toggle = function () {
-          $tooltip.$isShown ? $tooltip.leave() : $tooltip.enter();
+        $sbtooltip.toggle = function () {
+          $sbtooltip.$isShown ? $sbtooltip.leave() : $sbtooltip.enter();
         };
-        $tooltip.focus = function () {
+        $sbtooltip.focus = function () {
           tipElement[0].focus();
         };
         // Protected methods
-        $tooltip.$applyPlacement = function () {
+        $sbtooltip.$applyPlacement = function () {
           if (!tipElement)
             return;
           // Get the position of the tooltip element.
@@ -247,17 +247,17 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
           tipPosition.left += 'px';
           tipElement.css(tipPosition);
         };
-        $tooltip.$onKeyUp = function (evt) {
-          evt.which === 27 && $tooltip.hide();
+        $sbtooltip.$onKeyUp = function (evt) {
+          evt.which === 27 && $sbtooltip.hide();
         };
-        $tooltip.$onFocusKeyUp = function (evt) {
+        $sbtooltip.$onFocusKeyUp = function (evt) {
           evt.which === 27 && element[0].blur();
         };
-        $tooltip.$onFocusElementMouseDown = function (evt) {
+        $sbtooltip.$onFocusElementMouseDown = function (evt) {
           evt.preventDefault();
           evt.stopPropagation();
           // Some browsers do not auto-focus buttons (eg. Safari)
-          $tooltip.$isShown ? element[0].blur() : element[0].focus();
+          $sbtooltip.$isShown ? element[0].blur() : element[0].focus();
         };
         // Private methods
         function getPosition() {
@@ -319,7 +319,7 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
           }
           return offset;
         }
-        return $tooltip;
+        return $sbtooltip;
       }
       // Helper functions
       function findElement(query, element) {
@@ -341,9 +341,9 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
   '$window',
   '$location',
   '$sce',
-  '$tooltip',
+  '$sbtooltip',
   '$$rAF',
-  function ($window, $location, $sce, $tooltip, $$rAF) {
+  function ($window, $location, $sce, $sbtooltip, $$rAF) {
     return {
       restrict: 'EAC',
       scope: true,
@@ -370,7 +370,7 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
           attr[key] && attr.$observe(key, function (newValue, oldValue) {
             scope[key] = $sce.trustAsHtml(newValue);
             angular.isDefined(oldValue) && $$rAF(function () {
-              tooltip && tooltip.$applyPlacement();
+              sbtooltip && sbtooltip.$applyPlacement();
             });
           });
         });
@@ -382,16 +382,16 @@ angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions
             scope.title = newValue;
           }
           angular.isDefined(oldValue) && $$rAF(function () {
-            tooltip && tooltip.$applyPlacement();
+            sbtooltip && sbtooltip.$applyPlacement();
           });
         }, true);
         // Initialize popover
-        var tooltip = $tooltip(element, options);
+        var sbtooltip = $sbtooltip(element, options);
         // Garbage collection
         scope.$on('$destroy', function () {
-          tooltip.destroy();
+          sbtooltip.destroy();
           options = null;
-          tooltip = null;
+          sbtooltip = null;
         });
       }
     };

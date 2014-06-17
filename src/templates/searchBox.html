@@ -8,7 +8,7 @@
                  ng-repeat="parameter in sbResultList" ng-click="selectResult($index)"
                  repeat-done>
                 <div class="search_parameter_remove SB-icon SB-icon-cancel" ng-click="removeFilter($index)"><span class="glyphicon glyphicon-remove"></span></div>
-                <div class="key">{{ getFacetLabel(parameter.key) }}</div>
+                <div class="key">{{ getFacetLabel(parameter.key) }} : </div>
                 <div class="value"  ng-if="(parameter.type == null || parameter.type == 'string')"><span class="SB-inputSizer" >{{ parameter.value }}</span>
                 <input type="text"
                        data-tah-index="{{ $index }}"

@@ -20,7 +20,7 @@ angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'm
       limit: 6
     };
 
-    this.$get = function($window, $rootScope, $tooltip) {
+    this.$get = function($window, $rootScope, $sbtooltip) {
 
       var bodyEl = angular.element($window.document.body);
 
@@ -31,7 +31,7 @@ angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'm
         // Common vars
         var options = angular.extend({}, defaults, config);
 
-        $typeahead = $tooltip(element, options);
+        $typeahead = $sbtooltip(element, options);
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
 
