@@ -3445,7 +3445,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 resultList: '=',
                 facetList: '=',
                 debug: '=?',
-                dateOptions: '=?'
+                dateOptions: '=?',
+                getFilteredValues: '&'
             },
             link: function(scope, elem, attrs){
 
@@ -3677,10 +3678,17 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 }
 
                 // return all items of a facet
-                scope.getValues = function (key){
+                scope.getValues = function (key,inputText){
                     for (var facet in scope.sbFacetList){
-                        if(scope.sbFacetList[facet].name == key)
-                        return scope.sbFacetList[facet].items ;
+                        if(scope.sbFacetList[facet].name == key){
+                            if(inputText.length){
+                                return scope.getFilteredValues({facet:key,input:inputText});
+                            }else{
+                                return scope.sbFacetList[facet].items ;
+                            }
+
+                        }
+
                     }
                     return [];
                 }
