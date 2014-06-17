@@ -5,22 +5,6 @@
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-"use strict";angular.module("mgcrea.ngStrap.tooltip",["mgcrea.ngStrap.helpers.dimensions"]).provider("$tooltip",function(){var e=this.defaults={animation:"am-fade",prefixClass:"tooltip",prefixEvent:"tooltip",container:!1,placement:"top",template:"tooltip/tooltip.tpl.html",contentTemplate:!1,trigger:"hover focus",keyboard:!1,html:!1,show:!1,title:"",type:"",delay:0};this.$get=["$window","$rootScope","$compile","$q","$templateCache","$http","$animate","$timeout","dimensions","$$rAF",function(t,o,n,i,a,r,l,s,u,c){function p(t,i){function a(){return"body"===g.container?u.offset(t[0]):u.position(t[0])}function r(e,t,o,n){var i,a=e.split("-");switch(a[0]){case"right":i={top:t.top+t.height/2-n/2,left:t.left+t.width};break;case"bottom":i={top:t.top+t.height,left:t.left+t.width/2-o/2};break;case"left":i={top:t.top+t.height/2-n/2,left:t.left-o};break;default:i={top:t.top-n,left:t.left+t.width/2-o/2}}if(!a[1])return i;if("top"===a[0]||"bottom"===a[0])switch(a[1]){case"left":i.left=t.left;break;case"right":i.left=t.left+t.width-o}else if("left"===a[0]||"right"===a[0])switch(a[1]){case"top":i.top=t.top-n;break;case"bottom":i.top=t.top+t.height}return i}var s={},p=t[0].nodeName.toLowerCase(),g=s.$options=angular.extend({},e,i);s.$promise=h(g.template);var v=s.$scope=g.scope&&g.scope.$new()||o.$new();g.delay&&angular.isString(g.delay)&&(g.delay=parseFloat(g.delay)),g.title&&(s.$scope.title=g.title),v.$hide=function(){v.$$postDigest(function(){s.hide()})},v.$show=function(){v.$$postDigest(function(){s.show()})},v.$toggle=function(){v.$$postDigest(function(){s.toggle()})},s.$isShown=v.$isShown=!1;var y,w;g.contentTemplate&&(s.$promise=s.$promise.then(function(e){var t=angular.element(e);return h(g.contentTemplate).then(function(e){var o=f('[ng-bind="content"]',t[0]);return o.length||(o=f('[ng-bind="title"]',t[0])),o.removeAttr("ng-bind").html(e),t[0].outerHTML})}));var b,k,S,x;return s.$promise.then(function(e){angular.isObject(e)&&(e=e.data),g.html&&(e=e.replace(m,'ng-bind-html="')),e=d.apply(e),S=e,b=n(e),s.init()}),s.init=function(){g.delay&&angular.isNumber(g.delay)&&(g.delay={show:g.delay,hide:g.delay}),"self"===g.container?x=t:g.container&&(x=f(g.container));var e=g.trigger.split(" ");angular.forEach(e,function(e){"click"===e?t.on("click",s.toggle):"manual"!==e&&(t.on("hover"===e?"mouseenter":"focus",s.enter),t.on("hover"===e?"mouseleave":"blur",s.leave),"button"===p&&"hover"!==e&&t.on($?"touchstart":"mousedown",s.$onFocusElementMouseDown))}),g.show&&v.$$postDigest(function(){"focus"===g.trigger?t[0].focus():s.show()})},s.destroy=function(){for(var e=g.trigger.split(" "),o=e.length;o--;){var n=e[o];"click"===n?t.off("click",s.toggle):"manual"!==n&&(t.off("hover"===n?"mouseenter":"focus",s.enter),t.off("hover"===n?"mouseleave":"blur",s.leave),"button"===p&&"hover"!==n&&t.off($?"touchstart":"mousedown",s.$onFocusElementMouseDown))}k&&(k.remove(),k=null),v.$destroy()},s.enter=function(){return clearTimeout(y),w="in",g.delay&&g.delay.show?void(y=setTimeout(function(){"in"===w&&s.show()},g.delay.show)):s.show()},s.show=function(){v.$emit(g.prefixEvent+".show.before",s);var e=g.container?x:null,o=g.container?null:t;k&&k.remove(),k=s.$element=b(v,function(){}),k.css({top:"0px",left:"0px",display:"block"}).addClass(g.placement),g.animation&&k.addClass(g.animation),g.type&&k.addClass(g.prefixClass+"-"+g.type),l.enter(k,e,o,function(){v.$emit(g.prefixEvent+".show",s)}),s.$isShown=v.$isShown=!0,v.$$phase||v.$root.$$phase||v.$digest(),c(s.$applyPlacement),g.keyboard&&("focus"!==g.trigger?(s.focus(),k.on("keyup",s.$onKeyUp)):t.on("keyup",s.$onFocusKeyUp))},s.leave=function(){return clearTimeout(y),w="out",g.delay&&g.delay.hide?void(y=setTimeout(function(){"out"===w&&s.hide()},g.delay.hide)):s.hide()},s.hide=function(e){return s.$isShown?(v.$emit(g.prefixEvent+".hide.before",s),l.leave(k,function(){v.$emit(g.prefixEvent+".hide",s)}),s.$isShown=v.$isShown=!1,v.$$phase||v.$root.$$phase||v.$digest(),g.keyboard&&null!==k&&k.off("keyup",s.$onKeyUp),e&&"focus"===g.trigger?t[0].blur():void 0):void 0},s.toggle=function(){s.$isShown?s.leave():s.enter()},s.focus=function(){k[0].focus()},s.$applyPlacement=function(){if(k){var e=a(),t=k.prop("offsetWidth"),o=k.prop("offsetHeight"),n=r(g.placement,e,t,o);n.top+="px",n.left+="px",k.css(n)}},s.$onKeyUp=function(e){27===e.which&&s.hide()},s.$onFocusKeyUp=function(e){27===e.which&&t[0].blur()},s.$onFocusElementMouseDown=function(e){e.preventDefault(),e.stopPropagation(),s.$isShown?t[0].blur():t[0].focus()},s}function f(e,t){return angular.element((t||document).querySelectorAll(e))}function h(e){return i.when(a.get(e)||r.get(e)).then(function(t){return angular.isObject(t)?(a.put(e,t.data),t.data):t})}var d=String.prototype.trim,$="createTouch"in t.document,m=/ng-bind="/gi;return p}]}).directive("bsTooltip",["$window","$location","$sce","$tooltip","$$rAF",function(e,t,o,n,i){return{restrict:"EAC",scope:!0,link:function(e,t,a){var r={scope:e};angular.forEach(["template","contentTemplate","placement","container","delay","trigger","keyboard","html","animation","type"],function(e){angular.isDefined(a[e])&&(r[e]=a[e])}),angular.forEach(["title"],function(t){a[t]&&a.$observe(t,function(n,a){e[t]=o.trustAsHtml(n),angular.isDefined(a)&&i(function(){l&&l.$applyPlacement()})})}),a.bsTooltip&&e.$watch(a.bsTooltip,function(t,o){angular.isObject(t)?angular.extend(e,t):e.title=t,angular.isDefined(o)&&i(function(){l&&l.$applyPlacement()})},!0);var l=n(t,r);e.$on("$destroy",function(){l.destroy(),r=null,l=null})}}}]);
-/**
- * angular-strap
- * @version v2.0.2 - 2014-04-27
- * @link http://mgcrea.github.io/angular-strap
- * @author Olivier Louvignes (olivier@mg-crea.com)
- * @license MIT License, http://www.opensource.org/licenses/MIT
- */
-"use strict";angular.module("mgcrea.ngStrap.tooltip").run(["$templateCache",function(t){t.put("tooltip/tooltip.tpl.html",'<div class="tooltip in" ng-show="title"><div class="tooltip-arrow"></div><div class="tooltip-inner" ng-bind="title"></div></div>')}]);
-/**
- * angular-strap
- * @version v2.0.2 - 2014-04-27
- * @link http://mgcrea.github.io/angular-strap
- * @author Olivier Louvignes (olivier@mg-crea.com)
- * @license MIT License, http://www.opensource.org/licenses/MIT
- */
 "use strict";angular.module("mgcrea.ngStrap.helpers.parseOptions",[]).provider("$parseOptions",function(){var n=this.defaults={regexp:/^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/};this.$get=["$parse","$q",function(s,r){function e(e,t){function a(n,s){return n.map(function(n,r){var e,t,a={};return a[c]=n,e=o(s,a),t=f(s,a)||r,{label:e,value:t}})}var u={},i=angular.extend({},n,t);u.$values=[];var $,o,c,l,p,f,v;return u.init=function(){u.$match=$=e.match(i.regexp),o=s($[2]||$[1]),c=$[4]||$[6],l=$[5],p=s($[3]||""),f=s($[2]?$[1]:c),v=s($[7])},u.valuesFn=function(n,s){return r.when(v(n,s)).then(function(s){return u.$values=s?a(s,n):{},u.$values})},u.init(),u}return e}]});
 /**
  * angular-strap
@@ -3477,8 +3461,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 resultList: '=',
                 facetList: '=',
                 debug: '=?',
-                dateOptions: '=?',
-                getFilteredValues: '&'
+                dateOptions: '=?'
             },
             link: function(scope, elem, attrs){
 
@@ -3488,6 +3471,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.useKeywordFacet = false;
                 scope.hasKeywordFacet = false;
                 scope.toDay = moment().format('DD/MM/YYYY');
+                scope.initDone = false;
 
                 scope.dateOptions = scope.dateOptions || {
                     minDate: '01/01/2004',
@@ -3603,6 +3587,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
 
                 scope.$watch("facetList", function(facetList) {
                     scope.sbFacetList = initFacetList(facetList);
+                    scope.initDone = false;
                     scope.sbResultList = initSbResult(scope.resultList);
 
                     if(!scope.hasOwnProperty('selected')){
@@ -3611,7 +3596,9 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 });
 
                 scope.$watch("resultList", function(resultList) {
+                    scope.initDone = false;
                     scope.sbResultList = initSbResult(resultList);
+
                 });
 
                 var HOT_KEYS = [9, 13, 37, 39];
@@ -3657,11 +3644,11 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.bindValueInput = function(inputElem){
                     $timeout(function () {
                         inputElem.find('input').bind('keydown', function (evt) {
-
+                            scope.initDone = true;
                             if (HOT_KEYS.indexOf(evt.which) === -1) {
                                 return;
                             }
-
+                            scope.initDone = false;
                             evt.preventDefault();
 
                             if (evt.which === 13 || evt.which === 9) {
@@ -3710,12 +3697,13 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 }
 
                 // return all items of a facet
-                scope.getValues = function (key,inputTexte){
+                scope.getValues = function (key,inputText){
                     for (var facet in scope.sbFacetList){
                         if(scope.sbFacetList[facet].name == key){
-                            console.log(inputTexte.length);
-                            if(inputTexte.length){
-                                return scope.getFilteredValues({facet:key,input:inputTexte});
+                            console.log(key,inputText);
+                            if(scope.initDone && scope.sbFacetList[facet].hasOwnProperty('callback') && inputText.length){
+                                scope.initDone = false;
+                                return scope.sbFacetList[facet].callback(inputText);
                             }else{
                                 return scope.sbFacetList[facet].items ;
                             }
@@ -3859,8 +3847,407 @@ angular.module('ngDateRange', [])
         };
     }]);
 'use strict';
+angular.module('angularjssearchbox.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).provider('$tooltip', function () {
+  var defaults = this.defaults = {
+      animation: 'am-fade',
+      prefixClass: 'tooltip',
+      prefixEvent: 'tooltip',
+      container: false,
+      placement: 'top',
+      template: 'templates/tooltip.html',
+      contentTemplate: false,
+      trigger: 'hover focus',
+      keyboard: false,
+      html: false,
+      show: false,
+      title: '',
+      type: '',
+      delay: 0
+    };
+  this.$get = [
+    '$window',
+    '$rootScope',
+    '$compile',
+    '$q',
+    '$templateCache',
+    '$http',
+    '$animate',
+    '$timeout',
+    'dimensions',
+    '$$rAF',
+    function ($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions, $$rAF) {
+      var trim = String.prototype.trim;
+      var isTouch = 'createTouch' in $window.document;
+      var htmlReplaceRegExp = /ng-bind="/gi;
+      function TooltipFactory(element, config) {
+        var $tooltip = {};
+        // Common vars
+        var nodeName = element[0].nodeName.toLowerCase();
+        var options = $tooltip.$options = angular.extend({}, defaults, config);
+        $tooltip.$promise = fetchTemplate(options.template);
+        var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+        if (options.delay && angular.isString(options.delay)) {
+          options.delay = parseFloat(options.delay);
+        }
+        // Support scope as string options
+        if (options.title) {
+          $tooltip.$scope.title = options.title;
+        }
+        // Provide scope helpers
+        scope.$hide = function () {
+          scope.$$postDigest(function () {
+            $tooltip.hide();
+          });
+        };
+        scope.$show = function () {
+          scope.$$postDigest(function () {
+            $tooltip.show();
+          });
+        };
+        scope.$toggle = function () {
+          scope.$$postDigest(function () {
+            $tooltip.toggle();
+          });
+        };
+        $tooltip.$isShown = scope.$isShown = false;
+        // Private vars
+        var timeout, hoverState;
+        // Support contentTemplate option
+        if (options.contentTemplate) {
+          $tooltip.$promise = $tooltip.$promise.then(function (template) {
+            var templateEl = angular.element(template);
+            return fetchTemplate(options.contentTemplate).then(function (contentTemplate) {
+              var contentEl = findElement('[ng-bind="content"]', templateEl[0]);
+              if (!contentEl.length)
+                contentEl = findElement('[ng-bind="title"]', templateEl[0]);
+              contentEl.removeAttr('ng-bind').html(contentTemplate);
+              return templateEl[0].outerHTML;
+            });
+          });
+        }
+        // Fetch, compile then initialize tooltip
+        var tipLinker, tipElement, tipTemplate, tipContainer;
+        $tooltip.$promise.then(function (template) {
+          if (angular.isObject(template))
+            template = template.data;
+          if (options.html)
+            template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
+          template = trim.apply(template);
+          tipTemplate = template;
+          tipLinker = $compile(template);
+          $tooltip.init();
+        });
+        $tooltip.init = function () {
+          // Options: delay
+          if (options.delay && angular.isNumber(options.delay)) {
+            options.delay = {
+              show: options.delay,
+              hide: options.delay
+            };
+          }
+          // Replace trigger on touch devices ?
+          // if(isTouch && options.trigger === defaults.trigger) {
+          //   options.trigger.replace(/hover/g, 'click');
+          // }
+          // Options : container
+          if (options.container === 'self') {
+            tipContainer = element;
+          } else if (options.container) {
+            tipContainer = findElement(options.container);
+          }
+          // Options: trigger
+          var triggers = options.trigger.split(' ');
+          angular.forEach(triggers, function (trigger) {
+            if (trigger === 'click') {
+              element.on('click', $tooltip.toggle);
+            } else if (trigger !== 'manual') {
+              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
+              nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            }
+          });
+          // Options: show
+          if (options.show) {
+            scope.$$postDigest(function () {
+              options.trigger === 'focus' ? element[0].focus() : $tooltip.show();
+            });
+          }
+        };
+        $tooltip.destroy = function () {
+          // Unbind events
+          var triggers = options.trigger.split(' ');
+          for (var i = triggers.length; i--;) {
+            var trigger = triggers[i];
+            if (trigger === 'click') {
+              element.off('click', $tooltip.toggle);
+            } else if (trigger !== 'manual') {
+              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
+              nodeName === 'button' && trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            }
+          }
+          // Remove element
+          if (tipElement) {
+            tipElement.remove();
+            tipElement = null;
+          }
+          // Destroy scope
+          scope.$destroy();
+        };
+        $tooltip.enter = function () {
+          clearTimeout(timeout);
+          hoverState = 'in';
+          if (!options.delay || !options.delay.show) {
+            return $tooltip.show();
+          }
+          timeout = setTimeout(function () {
+            if (hoverState === 'in')
+              $tooltip.show();
+          }, options.delay.show);
+        };
+        $tooltip.show = function () {
+          scope.$emit(options.prefixEvent + '.show.before', $tooltip);
+          var parent = options.container ? tipContainer : null;
+          var after = options.container ? null : element;
+          // Hide any existing tipElement
+          if (tipElement)
+            tipElement.remove();
+          // Fetch a cloned element linked from template
+          tipElement = $tooltip.$element = tipLinker(scope, function (clonedElement, scope) {
+          });
+          // Set the initial positioning.
+          tipElement.css({
+            top: '0px',
+            left: '0px',
+            display: 'block'
+          }).addClass(options.placement);
+          // Options: animation
+          if (options.animation)
+            tipElement.addClass(options.animation);
+          // Options: type
+          if (options.type)
+            tipElement.addClass(options.prefixClass + '-' + options.type);
+          $animate.enter(tipElement, parent, after, function () {
+            scope.$emit(options.prefixEvent + '.show', $tooltip);
+          });
+          $tooltip.$isShown = scope.$isShown = true;
+          scope.$$phase || scope.$root.$$phase || scope.$digest();
+          $$rAF($tooltip.$applyPlacement);
+          // var a = bodyEl.offsetWidth + 1; ?
+          // Bind events
+          if (options.keyboard) {
+            if (options.trigger !== 'focus') {
+              $tooltip.focus();
+              tipElement.on('keyup', $tooltip.$onKeyUp);
+            } else {
+              element.on('keyup', $tooltip.$onFocusKeyUp);
+            }
+          }
+        };
+        $tooltip.leave = function () {
+          clearTimeout(timeout);
+          hoverState = 'out';
+          if (!options.delay || !options.delay.hide) {
+            return $tooltip.hide();
+          }
+          timeout = setTimeout(function () {
+            if (hoverState === 'out') {
+              $tooltip.hide();
+            }
+          }, options.delay.hide);
+        };
+        $tooltip.hide = function (blur) {
+          if (!$tooltip.$isShown)
+            return;
+          scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
+          $animate.leave(tipElement, function () {
+            scope.$emit(options.prefixEvent + '.hide', $tooltip);
+          });
+          $tooltip.$isShown = scope.$isShown = false;
+          scope.$$phase || scope.$root.$$phase || scope.$digest();
+          // Unbind events
+          if (options.keyboard && tipElement !== null) {
+            tipElement.off('keyup', $tooltip.$onKeyUp);
+          }
+          // Allow to blur the input when hidden, like when pressing enter key
+          if (blur && options.trigger === 'focus') {
+            return element[0].blur();
+          }
+        };
+        $tooltip.toggle = function () {
+          $tooltip.$isShown ? $tooltip.leave() : $tooltip.enter();
+        };
+        $tooltip.focus = function () {
+          tipElement[0].focus();
+        };
+        // Protected methods
+        $tooltip.$applyPlacement = function () {
+          if (!tipElement)
+            return;
+          // Get the position of the tooltip element.
+          var elementPosition = getPosition();
+          // Get the height and width of the tooltip so we can center it.
+          var tipWidth = tipElement.prop('offsetWidth'), tipHeight = tipElement.prop('offsetHeight');
+          // Get the tooltip's top and left coordinates to center it with this directive.
+          var tipPosition = getCalculatedOffset(options.placement, elementPosition, tipWidth, tipHeight);
+          // Now set the calculated positioning.
+          tipPosition.top += 'px';
+          tipPosition.left += 'px';
+          tipElement.css(tipPosition);
+        };
+        $tooltip.$onKeyUp = function (evt) {
+          evt.which === 27 && $tooltip.hide();
+        };
+        $tooltip.$onFocusKeyUp = function (evt) {
+          evt.which === 27 && element[0].blur();
+        };
+        $tooltip.$onFocusElementMouseDown = function (evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          // Some browsers do not auto-focus buttons (eg. Safari)
+          $tooltip.$isShown ? element[0].blur() : element[0].focus();
+        };
+        // Private methods
+        function getPosition() {
+          if (options.container === 'body') {
+            return dimensions.offset(element[0]);
+          } else {
+            return dimensions.position(element[0]);
+          }
+        }
+        function getCalculatedOffset(placement, position, actualWidth, actualHeight) {
+          var offset;
+          var split = placement.split('-');
+          switch (split[0]) {
+          case 'right':
+            offset = {
+              top: position.top + position.height / 2 - actualHeight / 2,
+              left: position.left + position.width
+            };
+            break;
+          case 'bottom':
+            offset = {
+              top: position.top + position.height,
+              left: position.left + position.width / 2 - actualWidth / 2
+            };
+            break;
+          case 'left':
+            offset = {
+              top: position.top + position.height / 2 - actualHeight / 2,
+              left: position.left - actualWidth
+            };
+            break;
+          default:
+            offset = {
+              top: position.top - actualHeight,
+              left: position.left + position.width / 2 - actualWidth / 2
+            };
+            break;
+          }
+          if (!split[1]) {
+            return offset;
+          }
+          // Add support for corners @todo css
+          if (split[0] === 'top' || split[0] === 'bottom') {
+            switch (split[1]) {
+            case 'left':
+              offset.left = position.left;
+              break;
+            case 'right':
+              offset.left = position.left + position.width - actualWidth;
+            }
+          } else if (split[0] === 'left' || split[0] === 'right') {
+            switch (split[1]) {
+            case 'top':
+              offset.top = position.top - actualHeight;
+              break;
+            case 'bottom':
+              offset.top = position.top + position.height;
+            }
+          }
+          return offset;
+        }
+        return $tooltip;
+      }
+      // Helper functions
+      function findElement(query, element) {
+        return angular.element((element || document).querySelectorAll(query));
+      }
+      function fetchTemplate(template) {
+        return $q.when($templateCache.get(template) || $http.get(template)).then(function (res) {
+          if (angular.isObject(res)) {
+            $templateCache.put(template, res.data);
+            return res.data;
+          }
+          return res;
+        });
+      }
+      return TooltipFactory;
+    }
+  ];
+}).directive('bsTooltip', [
+  '$window',
+  '$location',
+  '$sce',
+  '$tooltip',
+  '$$rAF',
+  function ($window, $location, $sce, $tooltip, $$rAF) {
+    return {
+      restrict: 'EAC',
+      scope: true,
+      link: function postLink(scope, element, attr, transclusion) {
+        // Directive options
+        var options = { scope: scope };
+        angular.forEach([
+          'template',
+          'contentTemplate',
+          'placement',
+          'container',
+          'delay',
+          'trigger',
+          'keyboard',
+          'html',
+          'animation',
+          'type'
+        ], function (key) {
+          if (angular.isDefined(attr[key]))
+            options[key] = attr[key];
+        });
+        // Observe scope attributes for change
+        angular.forEach(['title'], function (key) {
+          attr[key] && attr.$observe(key, function (newValue, oldValue) {
+            scope[key] = $sce.trustAsHtml(newValue);
+            angular.isDefined(oldValue) && $$rAF(function () {
+              tooltip && tooltip.$applyPlacement();
+            });
+          });
+        });
+        // Support scope as an object
+        attr.bsTooltip && scope.$watch(attr.bsTooltip, function (newValue, oldValue) {
+          if (angular.isObject(newValue)) {
+            angular.extend(scope, newValue);
+          } else {
+            scope.title = newValue;
+          }
+          angular.isDefined(oldValue) && $$rAF(function () {
+            tooltip && tooltip.$applyPlacement();
+          });
+        }, true);
+        // Initialize popover
+        var tooltip = $tooltip(element, options);
+        // Garbage collection
+        scope.$on('$destroy', function () {
+          tooltip.destroy();
+          options = null;
+          tooltip = null;
+        });
+      }
+    };
+  }
+]);
+'use strict';
 
-angular.module('angularjssearchbox.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
+angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
 
   .provider('$typeahead', function() {
 

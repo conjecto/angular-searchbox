@@ -9,8 +9,8 @@ var templateCache = require('gulp-angular-templatecache');
 var paths = {
   scripts: ['./src/js/**/*.js'],
   deps: [
-      "bower_components/angular-strap/dist/modules/tooltip.min.js",
-      "bower_components/angular-strap/dist/modules/tooltip.tpl.min.js",
+//      "bower_components/angular-strap/dist/modules/tooltip.min.js",
+//      "bower_components/angular-strap/dist/modules/tooltip.tpl.min.js",
       "bower_components/angular-strap/dist/modules/parse-options.min.js",
       "bower_components/angular-strap/dist/modules/dimensions.min.js"
   ],

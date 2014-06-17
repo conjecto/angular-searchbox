@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angularjssearchbox.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
+angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
 
   .provider('$typeahead', function() {
 
