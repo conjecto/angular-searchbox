@@ -3684,7 +3684,6 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.getValues = function (key,inputText){
                     for (var facet in scope.sbFacetList){
                         if(scope.sbFacetList[facet].name == key){
-                            console.log(key,inputText);
                             if(scope.initDone && scope.sbFacetList[facet].hasOwnProperty('callback') && inputText.length){
                                 scope.initDone = false;
                                 return scope.sbFacetList[facet].callback(inputText);
