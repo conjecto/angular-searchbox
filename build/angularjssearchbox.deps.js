@@ -3702,7 +3702,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         if(scope.sbFacetList[facet].name == key){
                             if(scope.initDone && scope.sbFacetList[facet].hasOwnProperty('callback') && inputText.length){
                                 scope.initDone = false;
-                                return scope.sbFacetList[facet].callback(inputText);
+                                return scope.sbFacetList[facet].callback(inputText,key);
                             }else{
                                 return scope.sbFacetList[facet].items ;
                             }
