@@ -32,7 +32,7 @@
   <script>
 
       function TestSearchBox($scope){
-          $scope.filteredValues = function(input){
+          $scope.filteredValues = function(input,facet){
               console.log('elastic-call');
               return [{name:"voila",label:'label',count:'1'}];
           }
