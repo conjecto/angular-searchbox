@@ -83,6 +83,9 @@ angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'm
         // Protected methods
 
         $typeahead.$isVisible = function() {
+          if(options.minLength == 0) {
+              return true;
+          }
           if(!options.minLength || !controller) {
             return !!scope.$matches.length;
           }

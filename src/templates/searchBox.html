@@ -19,7 +19,7 @@
                        data-min-length="0"
                        data-container="body"
                        ng-options="element.label as element.label + ' (' +element.count+')' for element in getValues(parameter.key,parameter.value) | filter:{label:$viewValue}"
-                       sb-focus sb-typeahead ng-options-watch="sbFacetList">
+                       sb-focus sb-typeahead ng-options-watch="values[parameter.key]">
                 </div>
                 <div class="input-append input-group value" ng-if="parameter.type == 'date'">
                     <span class="SB-inputSizer" >{{ parameter.value }}</span>

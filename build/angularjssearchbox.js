@@ -3456,6 +3456,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.hasKeywordFacet = false;
                 scope.toDay = moment().format('DD/MM/YYYY');
                 scope.initDone = false;
+                scope.values = {};
 
                 scope.dateOptions = scope.dateOptions || {
                     minDate: '01/01/2004',
@@ -3517,6 +3518,16 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         scope.selectedResult = null;
                     },100);
 
+                }
+
+                // get the named facet
+                function getFacet(name){
+                    for (var facet in scope.facetList){
+                        if(scope.facetList[facet].name === name){
+                            return scope.facetList[facet];
+                        }
+                    }
+                    return null;
                 }
 
                 // add label to item if not exist
@@ -3582,10 +3593,9 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.$watch("resultList", function(resultList) {
                     scope.initDone = false;
                     scope.sbResultList = initSbResult(resultList);
-
                 });
 
-                var HOT_KEYS = [9, 13, 37, 39];
+                var HOT_KEYS = [9, 13, 37, 38, 39, 40];
 
                 //bind keyboard events: enter(13) and tab(9) on Facet Input
                 elem.find('input').bind('keydown', function (evt) {
@@ -3628,11 +3638,17 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.bindValueInput = function(inputElem){
                     $timeout(function () {
                         inputElem.find('input').bind('keydown', function (evt) {
-                            scope.initDone = true;
+
+                            // find the corresponding facet to recall the callback
+                            var facet = getFacet(scope.sbResultList[evt.target.dataset.tahIndex].key);
                             if (HOT_KEYS.indexOf(evt.which) === -1) {
+                                scope.initDone = true;
+                                if(typeof facet.items == "function") {
+                                    delete scope.values[facet.name];
+                                }
                                 return;
                             }
-                            scope.initDone = false;
+
                             evt.preventDefault();
 
                             if (evt.which === 13 || evt.which === 9) {
@@ -3672,29 +3688,31 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 }
 
                 // return the value of a label
-                scope.getValueName = function(key,index,label){
-                    for (var facet in scope.sbFacetList){
-                        if(scope.sbFacetList[facet].name == key)
-                            return scope.sbFacetList[facet].items[index].name ;
-                    }
-                    return label;
+                scope.getValueName = function(key, index, label) {
+                    return scope.values[key][index].name || label;
                 }
 
                 // return all items of a facet
                 scope.getValues = function (key,inputText){
+                    if(scope.values[key] !== undefined) {
+                        return scope.values[key];
+                    }
                     for (var facet in scope.sbFacetList){
                         if(scope.sbFacetList[facet].name == key){
-                            if(scope.initDone && scope.sbFacetList[facet].hasOwnProperty('callback') && inputText.length){
-                                scope.initDone = false;
-                                return scope.sbFacetList[facet].callback(inputText,key);
-                            }else{
-                                return scope.sbFacetList[facet].items ;
+                            var items = scope.sbFacetList[facet].items;
+                            if(typeof items == "function") {
+                                items(inputText, key).then(function(items) {
+                                    scope.values[key] = items;
+                                });
+                            } else {
+                                $timeout(function() {
+                                    scope.values[key] = items;
+                                })
                             }
 
+                            return;
                         }
-
                     }
-                    return [];
                 }
 
                 // handle selection with the sbTypeAhead directive (tahIndex is the $index in the ngRepeat)
@@ -4313,6 +4331,9 @@ angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'm
         // Protected methods
 
         $typeahead.$isVisible = function() {
+          if(options.minLength == 0) {
+              return true;
+          }
           if(!options.minLength || !controller) {
             return !!scope.$matches.length;
           }
