@@ -18,8 +18,8 @@
                        data-trigger="focus"
                        data-min-length="0"
                        data-container="body"
-                       ng-options="element.label as element.label + ' (' +element.count+')' for element in getValues(parameter.key,parameter.value) | filter:{label:$viewValue}"
-                       sb-focus sb-typeahead ng-options-watch="sbFacetList">
+                       ng-options="element.label as element.label + ' (' +element.count+')' for element in getValues(parameter.key, $viewValue)"
+                       sb-focus sb-typeahead>
                 </div>
                 <div class="input-append input-group value" ng-if="parameter.type == 'date'">
                     <span class="SB-inputSizer" >{{ parameter.value }}</span>
@@ -72,7 +72,7 @@
                    data-trigger="focus"
                    data-container="body"
                    data-delay="{ show: 500, hide: 0 }"
-                   ng-options="element as element.label for element in sbFacetList | filter:{label:$viewValue}"
+                   ng-options="element as element.label for element in sbFacetList"
                    class="form-control" sb-typeahead ng-options-watch="sbFacetList">
             </div>
 

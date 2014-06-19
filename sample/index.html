@@ -31,12 +31,12 @@
 
   <script>
 
-      function TestSearchBox($scope){
+      function TestSearchBox($scope, $q, $timeout){
           $scope.filteredValues = function(input,facet){
               console.log('elastic-call');
               return [{name:"voila",label:'label',count:'1'}];
           }
-          $scope.parameters = [{'key':'formation','type':'string','value':'stage'},{'key':'thematique','value':'gestion-information'},{'key':'date','value':'12/02/2014'},{'key':'mixed-date-range','value':'12/02/2014 - 13/03/2014'}];
+          $scope.parameters = [{'key':'formation','type':'string','value':'stage'},{'key':'thematique','value':'gestion-information'},{'key':'date','value':'12/02/2014'},{'key':'mixed-date-range','value':'12/02/2014 - 13/03/2014'},{'key':'callback','value':'OUPS'}];
           $scope.customOptions = {
               minDate: '01/01/2004',
               maxDate: moment().add('years', 2),
@@ -107,7 +107,24 @@
                       {'name':'12/02/2014','count':1 },
                       {'name':'15/04/2014 - 16/07/2014','count':1 }
                   ]
-              }];
+              },
+                {   'name' : 'callback',
+                  'label':'Callback',
+                  'type':'string',
+                  'items': function() {
+                    var deferred = $q.defer();
+                    console.log("SERVER REQUEST");
+                    $timeout(function() {
+                      deferred.resolve([
+                        {'name':'stage','label':'Stage' + Math.random(),'count':32 },
+                        {'name':'enseignement-cursus','label':'Enseignement Cursus','count':8 },
+                        {'name':'action-diverse','label':'Action diverse','count':4 },
+                        {'name':'aqsdsqdse','label':'Action diqsdqsdverse','count':4 }
+                      ]);
+                    }, 1000);
+                    return deferred.promise;
+                  }
+                }];
 
           $scope.onClick = function() {
               $scope.facets = [
