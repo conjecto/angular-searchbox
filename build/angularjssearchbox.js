@@ -3639,16 +3639,10 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                     $timeout(function () {
                         inputElem.find('input').bind('keydown', function (evt) {
 
-                            // find the corresponding facet to recall the callback
-                            var facet = getFacet(scope.sbResultList[evt.target.dataset.tahIndex].key);
                             if (HOT_KEYS.indexOf(evt.which) === -1) {
                                 scope.initDone = true;
-                                if(typeof facet.items == "function") {
-                                    delete scope.values[facet.name];
-                                }
                                 return;
                             }
-
                             evt.preventDefault();
 
                             if (evt.which === 13 || evt.which === 9) {
@@ -3693,24 +3687,17 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 }
 
                 // return all items of a facet
-                scope.getValues = function (key,inputText){
-                    if(scope.values[key] !== undefined) {
-                        return scope.values[key];
-                    }
-                    for (var facet in scope.sbFacetList){
-                        if(scope.sbFacetList[facet].name == key){
-                            var items = scope.sbFacetList[facet].items;
-                            if(typeof items == "function") {
-                                items(inputText, key).then(function(items) {
-                                    scope.values[key] = items;
-                                });
-                            } else {
-                                $timeout(function() {
-                                    scope.values[key] = items;
-                                })
-                            }
-
-                            return;
+                scope.getValues = function (key, inputText){
+                    var facet = getFacet(key);
+                    if(facet) {
+                        if(typeof facet.items == "function") {
+                            return facet.items(inputText, key).then(function(items) {
+                                scope.values[key] = items;
+                                return items;
+                            });
+                        } else {
+                            scope.values[key] = facet.items;
+                            return facet.items;
                         }
                     }
                 }
@@ -3737,7 +3724,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                                 var tmpFilter = new Object();
                                 tmpFilter.key = scope.sbResultList[tahIndex].key;
                                 tmpFilter.type = scope.sbResultList[tahIndex].type;
-                                tmpFilter.value = scope.getValueName(tmpFilter.key,index,value);
+                                tmpFilter.value = scope.getValueName(tmpFilter.key, index, value);
                                 scope.resultList[tahIndex] = tmpFilter;
                                 scope.selectInputFacet();
                                 scope.selectedResult = null;
@@ -4331,9 +4318,6 @@ angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'm
         // Protected methods
 
         $typeahead.$isVisible = function() {
-          if(options.minLength == 0) {
-              return true;
-          }
           if(!options.minLength || !controller) {
             return !!scope.$matches.length;
           }
