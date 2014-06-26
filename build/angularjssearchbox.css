@@ -326,6 +326,11 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
   padding-top: 5px;
   padding-left: 28px; }
 
+.SB-placeholder span {
+  font-style: italic;
+  line-height: 1.7em;
+  padding-left: 2px; }
+
 .SB-search .SB-search-inner {
   position: relative;
   margin: 3px 20px; }
@@ -393,6 +398,9 @@ Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 
 .search_parameter.input-facet {
   padding: 0.5px 1px 0 1px; }
+
+.search_parameter.input-facet input:focus {
+  background-color: #fff; }
 
 .SB-search .search_parameter div {
   float: left;

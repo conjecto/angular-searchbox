@@ -3422,6 +3422,7 @@
 
 angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRange']).
    directive('sbFocus', ['$timeout', function($timeout){
+        // place focus on the the last empty (ie new) value input
         return function(scope, element){
             $timeout(function() {
                 if(!scope.useKeywordFacet){
@@ -3433,6 +3434,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
         };
    }]).
    directive('repeatDone', function() {
+        // bind the value input behavior after each execution of ng-repeat
      return function(scope, element, attrs) {
             scope.bindValueInput(element);
      }
@@ -3445,19 +3447,22 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 resultList: '=',
                 facetList: '=',
                 debug: '=?',
-                dateOptions: '=?'
+                dateOptions: '=?',
+                placeHolder: '=?'
             },
             link: function(scope, elem, attrs){
 
                 scope.tmpInputValue = null;
                 scope.selectedResult = null;
                 scope.debug = scope.debug || false;
+                scope.placeHolder = scope.placeHolder || 'Filtrer les données';
                 scope.useKeywordFacet = false;
                 scope.hasKeywordFacet = false;
-                scope.toDay = moment().format('DD/MM/YYYY');
                 scope.initDone = false;
                 scope.values = {};
 
+                // Begin of the dateRangePicker Configuration
+                scope.toDay = moment().format('DD/MM/YYYY');
                 scope.dateOptions = scope.dateOptions || {
                     minDate: '01/01/2004',
                     maxDate: moment().add('years', 2),
@@ -3497,6 +3502,8 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.dateOptionsDate.singleDatePicker = true;
                 scope.dateOptionsRange = angular.copy(scope.dateOptions);
 
+
+                // update the sbResultList and resultList from a dateRangePicker
                 scope.changeEventDateRange = function(start, end, label) {
                     var value = this.element['context'].value;
                     var tahIndex = this.element[0].attributes['data-tah-index'].value;
@@ -3517,8 +3524,9 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         scope.selectInputFacet();
                         scope.selectedResult = null;
                     },100);
-
                 }
+
+                // end of dateRangeRange configration
 
                 // get the named facet
                 function getFacet(name){
@@ -3640,6 +3648,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         inputElem.find('input').bind('keydown', function (evt) {
 
                             if (HOT_KEYS.indexOf(evt.which) === -1) {
+                                // the user is writing in the input, we can send a callback to get the new values
                                 scope.initDone = true;
                                 return;
                             }
@@ -3673,10 +3682,14 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                     elem.find('input')[elem.find('input').length-1].focus();
                 }
 
+                // return the label of a facet, or the key if not exist
                 scope.getFacetLabel = function(key){
                     for (var facet in scope.sbFacetList){
                         if(scope.sbFacetList[facet].name == key)
                             return scope.sbFacetList[facet].label ;
+                    }
+                    if (key === "text") {
+                        return "Mot(s) clé(s)";
                     }
                     return key;
                 }
