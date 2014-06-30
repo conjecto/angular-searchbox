@@ -30,14 +30,14 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 facetList: '=',
                 debug: '=?',
                 dateOptions: '=?',
-                placeHolder: '=?'
+                placeholder: '=?'
             },
             link: function(scope, elem, attrs){
 
                 scope.tmpInputValue = null;
                 scope.selectedResult = null;
                 scope.debug = scope.debug || false;
-                scope.placeHolder = scope.placeHolder || 'Filtrer les données';
+                scope.placeholder = scope.placeholder || 'Filtrer les données';
                 scope.useKeywordFacet = false;
                 scope.hasKeywordFacet = false;
                 scope.initDone = false;
@@ -93,7 +93,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                     if(typeof changeEventDateRangeTimeout !== "undefined"){
                         $timeout.cancel(changeEventDateRangeTimeout);
                     }
-                    
+
                     changeEventDateRangeTimeout = $timeout(function() {
                         if(scope.hasKeywordFacet){
                             if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
