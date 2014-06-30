@@ -30,7 +30,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 facetList: '=',
                 debug: '=?',
                 dateOptions: '=?',
-                placeholder: '=?'
+                placeholder: '@?'
             },
             link: function(scope, elem, attrs){
 
