@@ -3524,7 +3524,11 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                     var value = this.element['context'].value;
                     var tahIndex = this.element[0].attributes['data-tah-index'].value;
                     scope.sbResultList[tahIndex].value = value;
-                    $timeout(function() {
+                    if(typeof changeEventDateRangeTimeout !== "undefined"){
+                        $timeout.cancel(changeEventDateRangeTimeout);
+                    }
+                    
+                    changeEventDateRangeTimeout = $timeout(function() {
                         if(scope.hasKeywordFacet){
                             if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
                                 var tmp = scope.sbResultList.pop();
@@ -3539,7 +3543,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         scope.resultList[tahIndex] = tmpFilter;
                         scope.selectInputFacet();
                         scope.selectedResult = null;
-                    },100);
+                    },500);
                 }
 
                 // end of dateRangeRange configration
@@ -3690,7 +3694,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                                 });
                             }
                         });
-                    });
+                    },50);
                 }
 
                 // help to focus the input facet
