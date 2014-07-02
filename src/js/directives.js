@@ -42,6 +42,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.hasKeywordFacet = false;
                 scope.initDone = false;
                 scope.values = {};
+                scope.showPlaceHolder = true;
 
                 // Begin of the dateRangePicker Configuration
                 scope.toDay = moment().format('DD/MM/YYYY');
@@ -226,6 +227,18 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                             //angular.element(evt.srcElement).triggerHandler("keydown",{keyCode:13});
                         });
                     }
+                });
+
+                //bin focus and blur on the facet input to manage the place holder
+                elem.find('input').bind('focus', function (evt) {
+                    scope.$apply(function () {
+                        scope.showPlaceHolder = false;
+                    });
+                })
+                .bind('blur', function (evt) {
+                        scope.$apply(function () {
+                            scope.showPlaceHolder = true;
+                        });
                 });
 
                 //bind keyboard events: enter(13) and tab(9) on value Input
