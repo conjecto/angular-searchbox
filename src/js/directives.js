@@ -346,8 +346,9 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 });
 
                 // select filter (facet + value)
-                scope.selectResult = function (index){
+                scope.selectResult = function (index,evt){
                     scope.selectedResult = index ;
+                    angular.element(evt.currentTarget).find('input')[0].focus();
                 }
 
                 // remove filter (facet + value)
