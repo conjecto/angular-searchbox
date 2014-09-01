@@ -179,6 +179,9 @@ angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'm
         if(limit) ngOptions += ' | limitTo:' + limit;
         var parsedOptions = $parseOptions(ngOptions);
 
+        // Initialize typeahead
+        var typeahead = $typeahead(element, controller, options);
+
         var onWatch = function() {
             parsedOptions = $parseOptions(ngOptions);
             parsedOptions.valuesFn(scope, controller)
@@ -192,13 +195,9 @@ angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'm
                 });
         }
 
-
         if(attr.ngOptionsWatch) {
             scope.$watch(attr.ngOptionsWatch, onWatch);
         }
-
-        // Initialize typeahead
-        var typeahead = $typeahead(element, controller, options);
 
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {

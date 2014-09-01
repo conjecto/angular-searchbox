@@ -207,6 +207,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                             if(scope.useKeywordFacet)
                             {
                                 scope.selected.value = "" ;
+                                scope.initDone = true;
                                 if(scope.hasKeywordFacet){
                                     scope.sbResultList[scope.sbResultList.length-1].value +=" " + scope.selected.key;
                                     scope.resultList[scope.resultList.length-1].value +=" " + scope.selected.key;
@@ -268,7 +269,9 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                                     tmpFilter.type = scope.sbResultList[evt.target.dataset.tahIndex].type;
                                     tmpFilter.value = scope.sbResultList[evt.target.dataset.tahIndex].value;
                                     scope.resultList[evt.target.dataset.tahIndex] = tmpFilter;
-                                    scope.selectInputFacet();
+                                    $timeout(function() {
+                                        scope.selectInputFacet();
+                                    });
                                     scope.selectedResult = null;
                                 });
                             }
@@ -301,8 +304,14 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 // return all items of a facet
                 scope.getValues = function (key, inputText){
                     var facet = getFacet(key);
+
                     if(facet) {
                         if(typeof facet.items == "function") {
+                            if(!scope.initDone){
+                                return [];
+                            }else{
+                                scope.initDone = false;
+                            }
                             return facet.items(inputText, key).then(function(items) {
                                 scope.values[key] = items;
                                 return items;
@@ -323,6 +332,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                             scope.selected.value = "" ;
                             scope.sbResultList.push({ key : value.name, type: value.type, value : '' });
                             scope.selected.key = "" ;
+                            scope.initDone =true;
                         }else{
                             //value selection
                             $timeout(function() {
