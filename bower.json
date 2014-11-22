@@ -1,6 +1,7 @@
 {
   "name": "angularjssearchbox",
   "version": "0.0.0",
+  "main": ["build/angularjssearchbox.deps.js", "build/angularjssearchbox.css"],
   "authors": [
     "Conjecto"
   ],

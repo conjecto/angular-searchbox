@@ -2,7 +2,7 @@
 
 /* Directives */
 
-angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRange']).
+angular.module('angularjssearchbox', ['angularjssearchbox.typeahead']).
    directive('sbFocus', ['$timeout', function($timeout){
         // place focus on the the last empty (ie new) value input
         return function(scope, element){
@@ -29,7 +29,6 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 resultList: '=',
                 facetList: '=',
                 debug: '=?',
-                dateOptions: '=?',
                 placeholder: '@?'
             },
             link: function(scope, elem, attrs){
@@ -44,76 +43,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.values = {};
                 scope.showPlaceHolder = true;
 
-                // Begin of the dateRangePicker Configuration
-                scope.toDay = moment().format('DD/MM/YYYY');
-                scope.dateOptions = scope.dateOptions || {
-                    minDate: '01/01/2004',
-                    maxDate: moment().add('years', 2),
-                    showDropdowns: true,
-                    showWeekNumbers: false,
-                    timePicker: false,
-                    timePickerIncrement: 1,
-                    timePicker12Hour: false,
-                    ranges: {
-                        'Aujourd\'hui': [moment(), moment()],
-                        'Semestre en cours': (moment().get('month')<6 ? [moment().startOf('year'), moment().startOf('year').add('months', 6).subtract('days', 1)]:[moment().startOf('year').add('months', 6), moment().endOf('year')]),
-                        'Prochain Semestre': (moment().get('month')<6 ? [moment().startOf('year').add('months', 6), moment().endOf('year')]:[moment().startOf('year').add('years', 1), moment().endOf('year').add('months', 6)]),
-                        'Mois dernier': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                        '3 prochains mois': [moment().startOf('month'), moment().add('month', 3).endOf('month')]
-                    },
-                    opens: 'right',
-                    buttonClasses: ['btn btn-default'],
-                    applyClass: 'btn-small btn-primary',
-                    cancelClass: 'btn-small',
-                    format: 'DD/MM/YYYY',
-                    separator: ' - ',
-                    singleDatePicker: false,
-                    locale: {
-                        applyLabel: 'Valider',
-                        cancelLabel: 'Annuler',
-                        fromLabel: 'Du',
-                        toLabel: 'Au',
-                        customRangeLabel: 'Calendrier',
-                        daysOfWeek: ['Di','Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
-                        monthNames: ['Janvier', 'F&eacute;vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao&ucirc;t', 'Septembre', 'Octobre', 'Novembre', 'D&eacute;cembre'],
-                        firstDay: 1
-                    }
-                };
 
-
-                scope.dateOptionsDate = angular.copy(scope.dateOptions);
-                scope.dateOptionsDate.singleDatePicker = true;
-                scope.dateOptionsRange = angular.copy(scope.dateOptions);
-
-
-                // update the sbResultList and resultList from a dateRangePicker
-                scope.changeEventDateRange = function(start, end, label) {
-                    var value = this.element['context'].value;
-                    var tahIndex = this.element[0].attributes['data-tah-index'].value;
-                    scope.sbResultList[tahIndex].value = value;
-                    if(typeof changeEventDateRangeTimeout !== "undefined"){
-                        $timeout.cancel(changeEventDateRangeTimeout);
-                    }
-
-                    changeEventDateRangeTimeout = $timeout(function() {
-                        if(scope.hasKeywordFacet){
-                            if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
-                                var tmp = scope.sbResultList.pop();
-                                scope.sbResultList.splice(scope.sbResultList.length-1,0, tmp);
-                                tahIndex += -1;
-                            }
-                        }
-                        var tmpFilter = new Object();
-                        tmpFilter.key = scope.sbResultList[tahIndex].key;
-                        tmpFilter.type = scope.sbResultList[tahIndex].type;
-                        tmpFilter.value = value;
-                        scope.resultList[tahIndex] = tmpFilter;
-                        scope.selectInputFacet();
-                        scope.selectedResult = null;
-                    },500);
-                }
-
-                // end of dateRangeRange configration
 
                 // get the named facet
                 function getFacet(name){

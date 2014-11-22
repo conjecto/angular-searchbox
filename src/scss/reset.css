@@ -1,24 +1,20 @@
 /*------------------------------ RESET + DEFAULT STYLES ---------------------------------*/
-
 /*
-Eric Meyer's final reset.css
+Pimped from Eric Meyer's final reset.css
 Source: http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/
 */
-.SB-search div{
+.SB-search div {
     margin: 0;
     padding: 0;
-
     outline: 0;
     font-weight: inherit;
     font-style: inherit;
     font-size: 100%;
-    vertical-align: baseline;
-}
+    vertical-align: baseline; }
 
 .SB-search :focus {
-    outline: 0;
-}
+    outline: 0; }
+
 .SB-search {
     line-height: 1;
-    color: black;
-}
+    color: black; }
