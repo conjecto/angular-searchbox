@@ -232,6 +232,11 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                     }
                 });
 
+                // help focus filter list
+                elem.find('.input-facet').bind('click', function (evt) {
+                    angular.element('input', evt.target).focus();
+                });
+
                 //bin focus and blur on the facet input to manage the place holder
                 elem.find('input').bind('focus', function (evt) {
                     scope.$apply(function () {
