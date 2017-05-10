@@ -32,7 +32,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 dateOptions: '=?',
                 placeholder: '@?'
             },
-            link: function(scope, elem, attrs){
+            link: function(scope, elem, attrs) {
 
                 scope.tmpInputValue = null;
                 scope.selectedResult = null;
@@ -95,7 +95,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         $timeout.cancel(changeEventDateRangeTimeout);
                     }
 
-                    changeEventDateRangeTimeout = $timeout(function() {
+                    var changeEventDateRangeTimeout = $timeout(function() {
                         if(scope.hasKeywordFacet){
                             if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
                                 var tmp = scope.sbResultList.pop();
@@ -111,7 +111,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         scope.selectInputFacet();
                         scope.selectedResult = null;
                     },500);
-                }
+                };
 
                 // end of dateRangeRange configration
 
@@ -142,9 +142,11 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 function getValueLabel(facet,value){
                     for (var filter in scope.facetList){
                         if(scope.facetList[filter].name === facet){
-                            for (var item in scope.facetList[filter].items){
-                                if(scope.facetList[filter].items[item].name === value){
-                                    return scope.facetList[filter].items[item].label;
+                            if (scope.facetList[filter].values != null) {
+                                for (var valueLabel in scope.facetList[filter].values) {
+                                    if (valueLabel === value) {
+                                        return scope.facetList[filter].values[valueLabel];
+                                    }
                                 }
                             }
                         }
@@ -277,12 +279,12 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                             }
                         });
                     },50);
-                }
+                };
 
                 // help to focus the input facet
                 scope.selectInputFacet = function(){
                     elem.find('input')[elem.find('input').length-1].focus();
-                }
+                };
 
                 // return the label of a facet, or the key if not exist
                 scope.getFacetLabel = function(key){
@@ -294,12 +296,12 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         return "Mot(s) clé(s)";
                     }
                     return key;
-                }
+                };
 
                 // return the value of a label
                 scope.getValueName = function(key, index, label) {
                     return scope.values[key][index].name || label;
-                }
+                };
 
                 // return all items of a facet
                 scope.getValues = function (key, inputText){
@@ -321,7 +323,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                             return facet.items;
                         }
                     }
-                }
+                };
 
                 // handle selection with the sbTypeAhead directive (tahIndex is the $index in the ngRepeat)
                 scope.$on('$typeahead.select',function (evt, value, index, tahIndex){
@@ -346,7 +348,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                                 var tmpFilter = new Object();
                                 tmpFilter.key = scope.sbResultList[tahIndex].key;
                                 tmpFilter.type = scope.sbResultList[tahIndex].type;
-                                tmpFilter.value = scope.getValueName(tmpFilter.key, index, value);
+                                tmpFilter.value = getValueLabel(tmpFilter, scope.getValueName(tmpFilter.key, index, value));
                                 scope.resultList[tahIndex] = tmpFilter;
                                 scope.selectInputFacet();
                                 scope.selectedResult = null;
@@ -359,7 +361,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 scope.selectResult = function (index,evt){
                     scope.selectedResult = index ;
                     angular.element(evt.currentTarget).find('input')[0].focus();
-                }
+                };
 
                 // remove filter (facet + value)
                 scope.removeFilter = function ($index){
@@ -368,7 +370,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                     }
                     scope.sbResultList.splice($index,1);
                     scope.resultList = scope.sbResultList.slice(0);
-                }
+                };
 
                 // clean all the filters
                 scope.removeAll = function (){
