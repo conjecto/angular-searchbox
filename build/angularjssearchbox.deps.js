@@ -1,19 +1,21 @@
 /**
  * angular-strap
- * @version v2.0.2 - 2014-04-27
+ * @version v2.0.5 - 2014-08-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 "use strict";angular.module("mgcrea.ngStrap.helpers.parseOptions",[]).provider("$parseOptions",function(){var n=this.defaults={regexp:/^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/};this.$get=["$parse","$q",function(s,r){function e(e,t){function a(n,s){return n.map(function(n,r){var e,t,a={};return a[c]=n,e=o(s,a),t=f(s,a)||r,{label:e,value:t}})}var u={},i=angular.extend({},n,t);u.$values=[];var $,o,c,l,p,f,v;return u.init=function(){u.$match=$=e.match(i.regexp),o=s($[2]||$[1]),c=$[4]||$[6],l=$[5],p=s($[3]||""),f=s($[2]?$[1]:c),v=s($[7])},u.valuesFn=function(n,s){return r.when(v(n,s)).then(function(s){return u.$values=s?a(s,n):{},u.$values})},u.init(),u}return e}]});
+//# sourceMappingURL=parse-options.min.js.map
 /**
  * angular-strap
- * @version v2.0.2 - 2014-04-27
+ * @version v2.0.5 - 2014-08-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-"use strict";angular.module("mgcrea.ngStrap.helpers.dimensions",[]).factory("dimensions",["$document","$window",function(){var t=(angular.element,{}),e=t.nodeName=function(t,e){return t.nodeName&&t.nodeName.toLowerCase()===e.toLowerCase()};t.css=function(t,e,o){var n;return n=t.currentStyle?t.currentStyle[e]:window.getComputedStyle?window.getComputedStyle(t)[e]:t.style[e],o===!0?parseFloat(n)||0:n},t.offset=function(t){var e=t.getBoundingClientRect(),o=t.ownerDocument;return{width:t.offsetWidth,height:t.offsetHeight,top:e.top+(window.pageYOffset||o.documentElement.scrollTop)-(o.documentElement.clientTop||0),left:e.left+(window.pageXOffset||o.documentElement.scrollLeft)-(o.documentElement.clientLeft||0)}},t.position=function(n){var s,r,i={top:0,left:0};return"fixed"===t.css(n,"position")?r=n.getBoundingClientRect():(s=o(n),r=t.offset(n),r=t.offset(n),e(s,"html")||(i=t.offset(s)),i.top+=t.css(s,"borderTopWidth",!0),i.left+=t.css(s,"borderLeftWidth",!0)),{width:n.offsetWidth,height:n.offsetHeight,top:r.top-i.top-t.css(n,"marginTop",!0),left:r.left-i.left-t.css(n,"marginLeft",!0)}};var o=function(o){var n=o.ownerDocument,s=o.offsetParent||n;if(e(s,"#document"))return n.documentElement;for(;s&&!e(s,"html")&&"static"===t.css(s,"position");)s=s.offsetParent;return s||n.documentElement};return t.height=function(e,o){var n=e.offsetHeight;return o?n+=t.css(e,"marginTop",!0)+t.css(e,"marginBottom",!0):n-=t.css(e,"paddingTop",!0)+t.css(e,"paddingBottom",!0)+t.css(e,"borderTopWidth",!0)+t.css(e,"borderBottomWidth",!0),n},t.width=function(e,o){var n=e.offsetWidth;return o?n+=t.css(e,"marginLeft",!0)+t.css(e,"marginRight",!0):n-=t.css(e,"paddingLeft",!0)+t.css(e,"paddingRight",!0)+t.css(e,"borderLeftWidth",!0)+t.css(e,"borderRightWidth",!0),n},t}]);
+"use strict";angular.module("mgcrea.ngStrap.helpers.dimensions",[]).factory("dimensions",["$document","$window",function(){var t=(angular.element,{}),e=t.nodeName=function(t,e){return t.nodeName&&t.nodeName.toLowerCase()===e.toLowerCase()};t.css=function(t,e,o){var n;return n=t.currentStyle?t.currentStyle[e]:window.getComputedStyle?window.getComputedStyle(t)[e]:t.style[e],o===!0?parseFloat(n)||0:n},t.offset=function(t){var e=t.getBoundingClientRect(),o=t.ownerDocument;return{width:e.width||t.offsetWidth,height:e.height||t.offsetHeight,top:e.top+(window.pageYOffset||o.documentElement.scrollTop)-(o.documentElement.clientTop||0),left:e.left+(window.pageXOffset||o.documentElement.scrollLeft)-(o.documentElement.clientLeft||0)}},t.position=function(n){var s,i,r={top:0,left:0};return"fixed"===t.css(n,"position")?i=n.getBoundingClientRect():(s=o(n),i=t.offset(n),i=t.offset(n),e(s,"html")||(r=t.offset(s)),r.top+=t.css(s,"borderTopWidth",!0),r.left+=t.css(s,"borderLeftWidth",!0)),{width:n.offsetWidth,height:n.offsetHeight,top:i.top-r.top-t.css(n,"marginTop",!0),left:i.left-r.left-t.css(n,"marginLeft",!0)}};var o=function(o){var n=o.ownerDocument,s=o.offsetParent||n;if(e(s,"#document"))return n.documentElement;for(;s&&!e(s,"html")&&"static"===t.css(s,"position");)s=s.offsetParent;return s||n.documentElement};return t.height=function(e,o){var n=e.offsetHeight;return o?n+=t.css(e,"marginTop",!0)+t.css(e,"marginBottom",!0):n-=t.css(e,"paddingTop",!0)+t.css(e,"paddingBottom",!0)+t.css(e,"borderTopWidth",!0)+t.css(e,"borderBottomWidth",!0),n},t.width=function(e,o){var n=e.offsetWidth;return o?n+=t.css(e,"marginLeft",!0)+t.css(e,"marginRight",!0):n-=t.css(e,"paddingLeft",!0)+t.css(e,"paddingRight",!0)+t.css(e,"borderLeftWidth",!0)+t.css(e,"borderRightWidth",!0),n},t}]);
+//# sourceMappingURL=dimensions.min.js.map
 //! moment.js
 //! version : 2.5.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -3436,26 +3438,26 @@
 
 /* Directives */
 
-angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRange']).
-   directive('sbFocus', ['$timeout', function($timeout){
+angular.module('angularjssearchbox', ['angularjssearchbox.typeahead', 'ngDateRange'])
+    .directive('sbFocus', ['$timeout', function ($timeout) {
         // place focus on the the last empty (ie new) value input
-        return function(scope, element){
-            $timeout(function() {
-                if(!scope.useKeywordFacet){
-                    if(!element[0].value)
-                    element[0].focus();
+        return function (scope, element) {
+            $timeout(function () {
+                if (!scope.useKeywordFacet) {
+                    if (!element[0].value)
+                        element[0].focus();
 
                 }
             });
         };
-   }]).
-   directive('repeatDone', function() {
+    }])
+    .directive('repeatDone', function () {
         // bind the value input behavior after each execution of ng-repeat
-     return function(scope, element, attrs) {
+        return function (scope, element, attrs) {
             scope.bindValueInput(element);
-     }
-   }).
-   directive('searchBox', ['$timeout', function($timeout) {
+        }
+    })
+    .directive('searchBox', ['$timeout', function ($timeout) {
         return {
             restrict: 'A',
             templateUrl: 'templates/searchBox.html',
@@ -3466,7 +3468,7 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 dateOptions: '=?',
                 placeholder: '@?'
             },
-            link: function(scope, elem, attrs){
+            link: function (scope, elem, attrs) {
 
                 scope.tmpInputValue = null;
                 scope.selectedResult = null;
@@ -3481,59 +3483,57 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 // Begin of the dateRangePicker Configuration
                 scope.toDay = moment().format('DD/MM/YYYY');
                 scope.dateOptions = scope.dateOptions || {
-                    minDate: '01/01/2004',
-                    maxDate: moment().add('years', 2),
-                    showDropdowns: true,
-                    showWeekNumbers: false,
-                    timePicker: false,
-                    timePickerIncrement: 1,
-                    timePicker12Hour: false,
-                    ranges: {
-                        'Aujourd\'hui': [moment(), moment()],
-                        'Semestre en cours': (moment().get('month')<6 ? [moment().startOf('year'), moment().startOf('year').add('months', 6).subtract('days', 1)]:[moment().startOf('year').add('months', 6), moment().endOf('year')]),
-                        'Prochain Semestre': (moment().get('month')<6 ? [moment().startOf('year').add('months', 6), moment().endOf('year')]:[moment().startOf('year').add('years', 1), moment().endOf('year').add('months', 6)]),
-                        'Mois dernier': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                        '3 prochains mois': [moment().startOf('month'), moment().add('month', 3).endOf('month')]
-                    },
-                    opens: 'right',
-                    buttonClasses: ['btn btn-default'],
-                    applyClass: 'btn-small btn-primary',
-                    cancelClass: 'btn-small',
-                    format: 'DD/MM/YYYY',
-                    separator: ' - ',
-                    singleDatePicker: false,
-                    locale: {
-                        applyLabel: 'Valider',
-                        cancelLabel: 'Annuler',
-                        fromLabel: 'Du',
-                        toLabel: 'Au',
-                        customRangeLabel: 'Calendrier',
-                        daysOfWeek: ['Di','Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
-                        monthNames: ['Janvier', 'F&eacute;vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao&ucirc;t', 'Septembre', 'Octobre', 'Novembre', 'D&eacute;cembre'],
-                        firstDay: 1
-                    }
-                };
-
+                        minDate: '01/01/2004',
+                        maxDate: moment().add('years', 2),
+                        showDropdowns: true,
+                        showWeekNumbers: false,
+                        timePicker: false,
+                        timePickerIncrement: 1,
+                        timePicker12Hour: false,
+                        ranges: {
+                            'Aujourd\'hui': [moment(), moment()],
+                            'Semestre en cours': (moment().get('month') < 6 ? [moment().startOf('year'), moment().startOf('year').add('months', 6).subtract('days', 1)] : [moment().startOf('year').add('months', 6), moment().endOf('year')]),
+                            'Prochain Semestre': (moment().get('month') < 6 ? [moment().startOf('year').add('months', 6), moment().endOf('year')] : [moment().startOf('year').add('years', 1), moment().endOf('year').add('months', 6)]),
+                            'Mois dernier': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                            '3 prochains mois': [moment().startOf('month'), moment().add('month', 3).endOf('month')]
+                        },
+                        opens: 'right',
+                        buttonClasses: ['btn btn-default'],
+                        applyClass: 'btn-small btn-primary',
+                        cancelClass: 'btn-small',
+                        format: 'DD/MM/YYYY',
+                        separator: ' - ',
+                        singleDatePicker: false,
+                        locale: {
+                            applyLabel: 'Valider',
+                            cancelLabel: 'Annuler',
+                            fromLabel: 'Du',
+                            toLabel: 'Au',
+                            customRangeLabel: 'Calendrier',
+                            daysOfWeek: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+                            monthNames: ['Janvier', 'F&eacute;vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao&ucirc;t', 'Septembre', 'Octobre', 'Novembre', 'D&eacute;cembre'],
+                            firstDay: 1
+                        }
+                    };
 
                 scope.dateOptionsDate = angular.copy(scope.dateOptions);
                 scope.dateOptionsDate.singleDatePicker = true;
                 scope.dateOptionsRange = angular.copy(scope.dateOptions);
 
-
                 // update the sbResultList and resultList from a dateRangePicker
-                scope.changeEventDateRange = function(start, end, label) {
+                scope.changeEventDateRange = function (start, end, label) {
                     var value = this.element['context'].value;
                     var tahIndex = this.element[0].attributes['data-tah-index'].value;
                     scope.sbResultList[tahIndex].value = value;
-                    if(typeof changeEventDateRangeTimeout !== "undefined"){
+                    if (typeof changeEventDateRangeTimeout !== "undefined") {
                         $timeout.cancel(changeEventDateRangeTimeout);
                     }
 
-                    changeEventDateRangeTimeout = $timeout(function() {
-                        if(scope.hasKeywordFacet){
-                            if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
+                    var changeEventDateRangeTimeout = $timeout(function () {
+                        if (scope.hasKeywordFacet) {
+                            if (scope.sbResultList[scope.sbResultList.length - 1].key != 'text') {
                                 var tmp = scope.sbResultList.pop();
-                                scope.sbResultList.splice(scope.sbResultList.length-1,0, tmp);
+                                scope.sbResultList.splice(scope.sbResultList.length - 1, 0, tmp);
                                 tahIndex += -1;
                             }
                         }
@@ -3544,15 +3544,14 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                         scope.resultList[tahIndex] = tmpFilter;
                         scope.selectInputFacet();
                         scope.selectedResult = null;
-                    },500);
-                }
-
-                // end of dateRangeRange configration
+                    }, 500);
+                };
+                // end of dateRangeRange configuration
 
                 // get the named facet
-                function getFacet(name){
-                    for (var facet in scope.facetList){
-                        if(scope.facetList[facet].name === name){
+                function getFacet(name) {
+                    for (var facet in scope.facetList) {
+                        if (scope.facetList[facet].name === name) {
                             return scope.facetList[facet];
                         }
                     }
@@ -3560,12 +3559,12 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 }
 
                 // add label to item if not exist
-                function initFacetList(facetList){
-                    for (var facet in facetList){
-                        for (var item in facetList[facet].items){
-                            if(!facetList[facet].items[item].hasOwnProperty('label')){
+                function initFacetList(facetList) {
+                    for (var facet in facetList) {
+                        for (var item in facetList[facet].items) {
+                            if (!facetList[facet].items[item].hasOwnProperty('label')) {
                                 // @todo add type checking to format label
-                                facetList[facet].items[item].label=facetList[facet].items[item].name;
+                                facetList[facet].items[item].label = facetList[facet].items[item].name;
                             }
                         }
                     }
@@ -3573,12 +3572,14 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 }
 
                 // give label of a value, return the value if not exist
-                function getValueLabel(facet,value){
-                    for (var filter in scope.facetList){
-                        if(scope.facetList[filter].name === facet){
-                            for (var item in scope.facetList[filter].items){
-                                if(scope.facetList[filter].items[item].name === value){
-                                    return scope.facetList[filter].items[item].label;
+                function getValueLabel(facet, value) {
+                    for (var filter in scope.facetList) {
+                        if (scope.facetList[filter].name === facet) {
+                            if (scope.facetList[filter].values != null) {
+                                for (var valueLabel in scope.facetList[filter].values) {
+                                    if (valueLabel === value) {
+                                        return scope.facetList[filter].values[valueLabel];
+                                    }
                                 }
                             }
                         }
@@ -3587,9 +3588,9 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 }
 
                 // give type of a facet, return string if not exist
-                function getFacetType(facet){
-                    for (var filter in scope.facetList){
-                        if(scope.facetList[filter].name === facet){
+                function getFacetType(facet) {
+                    for (var filter in scope.facetList) {
+                        if (scope.facetList[filter].name === facet) {
                             return scope.facetList[filter].type;
                         }
                     }
@@ -3597,38 +3598,37 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                 }
 
                 // create sbResultList with type on filter
-                function initSbResult(resultList){
+                function initSbResult(resultList) {
                     var rez = [];
-                    for (var filter in resultList){
+                    for (var filter in resultList) {
                         var tmpFilter = new Object();
                         tmpFilter.key = resultList[filter].key;
                         tmpFilter.type = getFacetType(tmpFilter.key);
-                        tmpFilter.value = getValueLabel(tmpFilter.key,resultList[filter].value);
+                        tmpFilter.value = getValueLabel(tmpFilter.key, resultList[filter].value);
                         rez.push(tmpFilter);
                     }
                     return rez;
                 }
 
-                scope.$watch("facetList", function(facetList) {
+                scope.$watch("facetList", function (facetList) {
                     scope.sbFacetList = initFacetList(facetList);
                     scope.initDone = false;
                     scope.sbResultList = initSbResult(scope.resultList);
 
-                    if(!scope.hasOwnProperty('selected')){
-                        scope.selected = {key:"", value:""};
+                    if (!scope.hasOwnProperty('selected')) {
+                        scope.selected = {key: "", value: ""};
                     }
                 });
 
-                scope.$watch("resultList", function(resultList) {
+                scope.$watch("resultList", function (resultList) {
                     scope.initDone = false;
                     scope.sbResultList = initSbResult(resultList);
                 });
 
                 var HOT_KEYS = [9, 13, 37, 38, 39, 40];
 
-                //bind keyboard events: enter(13) and tab(9) on Facet Input
+                // bind keyboard events: enter(13) and tab(9) on Facet Input
                 elem.find('input').bind('keydown', function (evt) {
-
                     if (HOT_KEYS.indexOf(evt.which) === -1) {
                         return;
                     }
@@ -3638,46 +3638,51 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                     if (evt.which === 13) {
                         scope.useKeywordFacet = true;
                         $timeout(function () {
-                            if(scope.useKeywordFacet)
-                            {
-                                scope.selected.value = "" ;
+                            if (scope.useKeywordFacet) {
+                                scope.selected.value = "";
                                 scope.initDone = true;
-                                if(scope.hasKeywordFacet){
-                                    scope.sbResultList[scope.sbResultList.length-1].value +=" " + scope.selected.key;
-                                    scope.resultList[scope.resultList.length-1].value +=" " + scope.selected.key;
-                                }else{
+                                if (scope.hasKeywordFacet) {
+                                    scope.sbResultList[scope.sbResultList.length - 1].value += " " + scope.selected.key;
+                                    scope.resultList[scope.resultList.length - 1].value += " " + scope.selected.key;
+                                } else {
                                     scope.hasKeywordFacet = true;
-                                    scope.sbResultList.push({ key : 'text', type: 'string', value :  scope.selected.key});
-                                    scope.resultList.push({ key : 'text', type: 'string', value :  scope.selected.key});
+                                    scope.sbResultList.push({key: 'text', type: 'string', value: scope.selected.key});
+                                    scope.resultList.push({key: 'text', type: 'string', value: scope.selected.key});
                                 }
-                                scope.selected.key = "" ;
+                                scope.selected.key = "";
                                 $timeout(function () {
                                     scope.selectInputFacet();
                                     scope.selectedResult = null;
                                 });
                             }
                         });
-                    }else if (evt.which === 9) {
+                    }
+                    else if (evt.which === 9) {
                         scope.$apply(function () {
-                            //angular.element(evt.srcElement).triggerHandler("keydown",{keyCode:13});
+                            // angular.element(evt.srcElement).triggerHandler("keydown",{keyCode:13});
                         });
                     }
                 });
 
-                //bin focus and blur on the facet input to manage the place holder
+                // help focus filter list
+                elem.find('.input-facet').bind('click', function (evt) {
+                    angular.element('input', evt.target).focus();
+                });
+
+                // bin focus and blur on the facet input to manage the place holder
                 elem.find('input').bind('focus', function (evt) {
-                    scope.$apply(function () {
-                        scope.showPlaceHolder = false;
-                    });
-                })
-                .bind('blur', function (evt) {
+                        scope.$apply(function () {
+                            scope.showPlaceHolder = false;
+                        });
+                    })
+                    .bind('blur', function (evt) {
                         scope.$apply(function () {
                             scope.showPlaceHolder = true;
                         });
-                });
+                    });
 
-                //bind keyboard events: enter(13) and tab(9) on value Input
-                scope.bindValueInput = function(inputElem){
+                // bind keyboard events: enter(13) and tab(9) on value Input
+                scope.bindValueInput = function (inputElem) {
                     $timeout(function () {
                         inputElem.find('input').bind('keydown', function (evt) {
 
@@ -3689,11 +3694,11 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                             evt.preventDefault();
 
                             if (evt.which === 13 || evt.which === 9) {
-                                if(scope.hasKeywordFacet){
+                                if (scope.hasKeywordFacet) {
                                     scope.$apply(function () {
-                                        if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
+                                        if (scope.sbResultList[scope.sbResultList.length - 1].key != 'text') {
                                             var tmp = scope.sbResultList.pop();
-                                            scope.sbResultList.splice(scope.sbResultList.length-1,0, tmp);
+                                            scope.sbResultList.splice(scope.sbResultList.length - 1, 0, tmp);
                                         }
                                     });
                                 }
@@ -3703,50 +3708,50 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                                     tmpFilter.type = scope.sbResultList[evt.target.dataset.tahIndex].type;
                                     tmpFilter.value = scope.sbResultList[evt.target.dataset.tahIndex].value;
                                     scope.resultList[evt.target.dataset.tahIndex] = tmpFilter;
-                                    $timeout(function() {
+                                    $timeout(function () {
                                         scope.selectInputFacet();
                                     });
                                     scope.selectedResult = null;
                                 });
                             }
                         });
-                    },50);
-                }
+                    }, 50);
+                };
 
                 // help to focus the input facet
-                scope.selectInputFacet = function(){
-                    elem.find('input')[elem.find('input').length-1].focus();
-                }
+                scope.selectInputFacet = function () {
+                    elem.find('input')[elem.find('input').length - 1].focus();
+                };
 
                 // return the label of a facet, or the key if not exist
-                scope.getFacetLabel = function(key){
-                    for (var facet in scope.sbFacetList){
-                        if(scope.sbFacetList[facet].name == key)
-                            return scope.sbFacetList[facet].label ;
+                scope.getFacetLabel = function (key) {
+                    for (var facet in scope.sbFacetList) {
+                        if (scope.sbFacetList[facet].name == key)
+                            return scope.sbFacetList[facet].label;
                     }
                     if (key === "text") {
                         return "Mot(s) clé(s)";
                     }
                     return key;
-                }
+                };
 
                 // return the value of a label
-                scope.getValueName = function(key, index, label) {
+                scope.getValueName = function (key, index, label) {
                     return scope.values[key][index].name || label;
-                }
+                };
 
                 // return all items of a facet
-                scope.getValues = function (key, inputText){
+                scope.getValues = function (key, inputText) {
                     var facet = getFacet(key);
 
-                    if(facet) {
-                        if(typeof facet.items == "function") {
-                            if(!scope.initDone){
+                    if (facet) {
+                        if (typeof facet.items == "function") {
+                            if (!scope.initDone) {
                                 return [];
-                            }else{
+                            } else {
                                 scope.initDone = false;
                             }
-                            return facet.items(inputText, key).then(function(items) {
+                            return facet.items(inputText, key).then(function (items) {
                                 scope.values[key] = items;
                                 return items;
                             });
@@ -3755,57 +3760,57 @@ angular.module('angularjssearchbox', ['angularjssearchbox.typeahead','ngDateRang
                             return facet.items;
                         }
                     }
-                }
+                };
 
                 // handle selection with the sbTypeAhead directive (tahIndex is the $index in the ngRepeat)
-                scope.$on('$typeahead.select',function (evt, value, index, tahIndex){
+                scope.$on('$typeahead.select', function (evt, value, index, tahIndex) {
                     scope.$apply(function () {
                         scope.useKeywordFacet = false;
-                        if(tahIndex == -1){
+                        if (tahIndex == -1) {
                             //facet selection
-                            scope.selected.value = "" ;
-                            scope.sbResultList.push({ key : value.name, type: value.type, value : '' });
-                            scope.selected.key = "" ;
-                            scope.initDone =true;
-                        }else{
+                            scope.selected.value = "";
+                            scope.sbResultList.push({key: value.name, type: value.type, value: ''});
+                            scope.selected.key = "";
+                            scope.initDone = true;
+                        } else {
                             //value selection
-                            $timeout(function() {
-                                if(scope.hasKeywordFacet){
-                                    if(scope.sbResultList[scope.sbResultList.length-1].key != 'text'){
+                            $timeout(function () {
+                                if (scope.hasKeywordFacet) {
+                                    if (scope.sbResultList[scope.sbResultList.length - 1].key != 'text') {
                                         var tmp = scope.sbResultList.pop();
-                                        scope.sbResultList.splice(scope.sbResultList.length-1,0, tmp);
+                                        scope.sbResultList.splice(scope.sbResultList.length - 1, 0, tmp);
                                         tahIndex += -1;
                                     }
                                 }
                                 var tmpFilter = new Object();
                                 tmpFilter.key = scope.sbResultList[tahIndex].key;
                                 tmpFilter.type = scope.sbResultList[tahIndex].type;
-                                tmpFilter.value = scope.getValueName(tmpFilter.key, index, value);
+                                tmpFilter.value = getValueLabel(tmpFilter, scope.getValueName(tmpFilter.key, index, value));
                                 scope.resultList[tahIndex] = tmpFilter;
                                 scope.selectInputFacet();
                                 scope.selectedResult = null;
-                            },100);
+                            }, 100);
                         }
                     });
                 });
 
                 // select filter (facet + value)
-                scope.selectResult = function (index,evt){
-                    scope.selectedResult = index ;
+                scope.selectResult = function (index, evt) {
+                    scope.selectedResult = index;
                     angular.element(evt.currentTarget).find('input')[0].focus();
-                }
+                };
 
                 // remove filter (facet + value)
-                scope.removeFilter = function ($index){
-                    if(scope.sbResultList[$index].key === "text"){
+                scope.removeFilter = function ($index) {
+                    if (scope.sbResultList[$index].key === "text") {
                         scope.hasKeywordFacet = false;
                     }
-                    scope.sbResultList.splice($index,1);
+                    scope.sbResultList.splice($index, 1);
                     scope.resultList = scope.sbResultList.slice(0);
-                }
+                };
 
                 // clean all the filters
-                scope.removeAll = function (){
+                scope.removeAll = function () {
                     scope.hasKeywordFacet = false;
                     scope.sbResultList.length = 0;
                     scope.resultList.length = 0;
@@ -4520,6 +4525,6 @@ angular.module('angularjssearchbox.typeahead', ['angularjssearchbox.tooltip', 'm
 
   });
 
-angular.module("angularjssearchbox").run(["$templateCache", function($templateCache) {$templateCache.put("templates/searchBox.html","<!--<pre ng-show=\"debug\">Model: {{selected.key | json}} Value : {{ selected.value | json}} opened : {{ opened }}-->\r\n<!--{{!sbResultList.length && showPlaceHolder }}-->\r\n<!--{{ showPlaceHolder }}</pre>-->\r\n<div class=\"SB-search\">\r\n    <div class=\"SB-search-box-wrapper form-control SB-search-box \" >\r\n        <div class=\"SB-icon SB-icon-search\"><span class=\"glyphicon glyphicon-search\"></span></div>\r\n        <div class=\"SB-placeholder\" ng-click=\"selectInputFacet()\"><span ng-if=\"!sbResultList.length && showPlaceHolder\">{{ placeholder }}</span></div>\r\n        <div class=\"SB-search-inner\" >\r\n            <div class=\"search_parameter\" style=\"padding:0;\" ng-hide=\"sbResultList.length\"></div>\r\n            <div class=\"search_parameter\" ng-class=\"{ selected : $index == selectedResult }\"\r\n                 ng-repeat=\"parameter in sbResultList\" ng-click=\"selectResult($index,$event)\"\r\n                 repeat-done>\r\n                <div class=\"search_parameter_remove SB-icon SB-icon-cancel\" ng-click=\"removeFilter($index)\"><span class=\"glyphicon glyphicon-remove\"></span></div>\r\n                <div class=\"key\">{{ getFacetLabel(parameter.key) }} : </div>\r\n                <div class=\"value\"  ng-if=\"(parameter.type == null || parameter.type == \'string\')\"><span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\r\n                <input type=\"text\"\r\n                       data-tah-index=\"{{ $index }}\"\r\n                       ng-model=\"parameter.value\"\r\n                       class=\"form-control SB-inputValue\"\r\n                       limit=\"999\"\r\n                       data-trigger=\"focus\"\r\n                       data-min-length=\"0\"\r\n                       data-container=\"body\"\r\n                       ng-options=\"element.label as element.label + \' (\' +element.count+\')\' for element in getValues(parameter.key, $viewValue)\"\r\n                       sb-focus sb-typeahead>\r\n                </div>\r\n                <div class=\"input-append input-group value\" ng-if=\"parameter.type == \'date\'\">\r\n                    <span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\r\n                    <input type=\"text\"\r\n                           data-tah-index=\"{{ $index }}\"\r\n                           ng-model=\"parameter.value\"\r\n                           ng-if=\"parameter.type == \'date\'\"\r\n                           class=\"form-control SB-inputValue\"\r\n                           value=\"{{ parameter.value || toDay }}\"\r\n                           date-range\r\n                           date-range-options=\"dateOptionsDate\"\r\n                           date-range-change=\"changeEventDateRange\"\r\n                           sb-focus >\r\n                </div>\r\n                <div class=\"input-append input-group value\" ng-if=\"parameter.type == \'range\'\">\r\n                    <span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\r\n                    <input type=\"text\"\r\n                           data-tah-index=\"{{ $index }}\"\r\n                           ng-model=\"parameter.value\"\r\n                           ng-if=\"parameter.type == \'range\'\"\r\n                           class=\"form-control SB-inputValue\"\r\n                           value=\"{{ parameter.value || toDay }}\"\r\n                           date-range\r\n                           date-range-options=\"dateOptionsRange\"\r\n                           date-range-change=\"changeEventDateRange\"\r\n                           sb-focus >\r\n                </div>\r\n                <div class=\"input-append input-group value\" ng-if=\"parameter.type == \'dateOrRange\'\">\r\n                    <span class=\"SB-inputSizer tgdaterange\" >{{ parameter.value }}</span>\r\n                    <input type=\"text\"\r\n                           data-tah-index=\"{{ $index }}\"\r\n                           ng-model=\"parameter.value\"\r\n                           ng-if=\"parameter.type == \'dateOrRange\'\"\r\n                           class=\"form-control SB-inputValue\"\r\n                           value=\"{{ parameter.value || toDay}}\"\r\n                           date-range\r\n                           date-range-options=\"dateOptions\"\r\n                           date-range-tbutton=\"true\"\r\n                           date-range-change=\"changeEventDateRange\"\r\n                           sb-focus >\r\n                </div>\r\n            </div>\r\n            </div>\r\n            <div class=\"search_parameter input-facet\">\r\n            <input\r\n                   data-min-length=\"0\"\r\n                   type=\"text\"\r\n                   ng-model=\"selected.key\"\r\n                   data-limit=\"30\"\r\n                   data-trigger=\"focus\"\r\n                   data-container=\"body\"\r\n                   data-delay=\"{ show: 500, hide: 0 }\"\r\n                   ng-options=\"element as element.label for element in sbFacetList\"\r\n                   class=\"form-control\" sb-typeahead ng-options-watch=\"sbFacetList\">\r\n            </div>\r\n\r\n        </div>\r\n        <div class=\"SB-icon SB-icon-cancel SB-cancel-search-box\" title=\"clear search\" ng-click=\"removeAll()\"><span class=\"glyphicon glyphicon-remove-circle\"></span></div>\r\n    </div>\r\n</div>\r\n<!--<pre ng-show=\"debug\" style=\"margin-top: 10px;\">sbResultList: {{sbResultList | json}} </pre>-->\r\n<!--<pre ng-show=\"debug\">resultList (input/output): {{resultList | json}} </pre>-->\r\n<!--<pre ng-show=\"debug\">sbFacetList (input): {{sbFacetList | json}} </pre>-->\r\n");
+angular.module("angularjssearchbox").run(["$templateCache", function($templateCache) {$templateCache.put("templates/searchBox.html","<!--<pre ng-show=\"debug\">Model: {{selected.key | json}} Value : {{ selected.value | json}} opened : {{ opened }}-->\n<!--{{!sbResultList.length && showPlaceHolder }}-->\n<!--{{ showPlaceHolder }}</pre>-->\n<div class=\"SB-search\">\n    <div class=\"SB-search-box-wrapper form-control SB-search-box \" >\n        <div class=\"SB-icon SB-icon-search\"><span class=\"glyphicon glyphicon-search\"></span></div>\n        <div class=\"SB-placeholder\" ng-click=\"selectInputFacet()\"><span ng-if=\"!sbResultList.length && showPlaceHolder\">{{ placeholder }}</span></div>\n        <div class=\"SB-search-inner\" >\n            <div class=\"search_parameter\" style=\"padding:0;\" ng-hide=\"sbResultList.length\"></div>\n            <div class=\"search_parameter\" ng-class=\"{ selected : $index == selectedResult }\"\n                 ng-repeat=\"parameter in sbResultList\" ng-click=\"selectResult($index,$event)\"\n                 repeat-done>\n                <div class=\"search_parameter_remove SB-icon SB-icon-cancel\" ng-click=\"removeFilter($index)\"><span class=\"glyphicon glyphicon-remove\"></span></div>\n                <div class=\"key\">{{ getFacetLabel(parameter.key) }} : </div>\n                <div class=\"value\"  ng-if=\"(parameter.type == null || parameter.type == \'string\')\"><span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\n                <input type=\"text\"\n                       data-tah-index=\"{{ $index }}\"\n                       ng-model=\"parameter.value\"\n                       class=\"form-control SB-inputValue\"\n                       limit=\"999\"\n                       data-trigger=\"focus\"\n                       data-min-length=\"0\"\n                       data-container=\"body\"\n                       ng-options=\"element.label as element.label + \' (\' +element.count+\')\' for element in getValues(parameter.key, $viewValue)\"\n                       sb-focus sb-typeahead>\n                </div>\n                <div class=\"input-append input-group value\" ng-if=\"parameter.type == \'date\'\">\n                    <span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\n                    <input type=\"text\"\n                           data-tah-index=\"{{ $index }}\"\n                           ng-model=\"parameter.value\"\n                           ng-if=\"parameter.type == \'date\'\"\n                           class=\"form-control SB-inputValue\"\n                           value=\"{{ parameter.value || toDay }}\"\n                           date-range\n                           date-range-options=\"dateOptionsDate\"\n                           date-range-change=\"changeEventDateRange\"\n                           sb-focus >\n                </div>\n                <div class=\"input-append input-group value\" ng-if=\"parameter.type == \'range\'\">\n                    <span class=\"SB-inputSizer\" >{{ parameter.value }}</span>\n                    <input type=\"text\"\n                           data-tah-index=\"{{ $index }}\"\n                           ng-model=\"parameter.value\"\n                           ng-if=\"parameter.type == \'range\'\"\n                           class=\"form-control SB-inputValue\"\n                           value=\"{{ parameter.value || toDay }}\"\n                           date-range\n                           date-range-options=\"dateOptionsRange\"\n                           date-range-change=\"changeEventDateRange\"\n                           sb-focus >\n                </div>\n                <div class=\"input-append input-group value\" ng-if=\"parameter.type == \'dateOrRange\'\">\n                    <span class=\"SB-inputSizer tgdaterange\" >{{ parameter.value }}</span>\n                    <input type=\"text\"\n                           data-tah-index=\"{{ $index }}\"\n                           ng-model=\"parameter.value\"\n                           ng-if=\"parameter.type == \'dateOrRange\'\"\n                           class=\"form-control SB-inputValue\"\n                           value=\"{{ parameter.value || toDay}}\"\n                           date-range\n                           date-range-options=\"dateOptions\"\n                           date-range-tbutton=\"true\"\n                           date-range-change=\"changeEventDateRange\"\n                           sb-focus >\n                </div>\n            </div>\n        </div>\n        <div class=\"search_parameter input-facet\">\n            <input\n                   data-min-length=\"0\"\n                   type=\"text\"\n                   ng-model=\"selected.key\"\n                   data-limit=\"30\"\n                   data-trigger=\"focus\"\n                   data-container=\"body\"\n                   data-delay=\"{ show: 500, hide: 0 }\"\n                   ng-options=\"element as element.label for element in sbFacetList\"\n                   class=\"form-control\" sb-typeahead ng-options-watch=\"sbFacetList\"\n            />\n        </div>\n\n    </div>\n    <div class=\"SB-icon SB-icon-cancel SB-cancel-search-box\" title=\"clear search\" ng-click=\"removeAll()\"><span class=\"glyphicon glyphicon-remove-circle\"></span></div>\n</div>\n<!--<pre ng-show=\"debug\" style=\"margin-top: 10px;\">sbResultList: {{sbResultList | json}} </pre>-->\n<!--<pre ng-show=\"debug\">resultList (input/output): {{resultList | json}} </pre>-->\n<!--<pre ng-show=\"debug\">sbFacetList (input): {{sbFacetList | json}} </pre>-->\n");
 $templateCache.put("templates/tooltip.html","<div class=\"tooltip in\" ng-show=\"title\"><div class=\"tooltip-arrow\"></div><div class=\"tooltip-inner\" ng-bind=\"title\"></div></div>\n");
 $templateCache.put("templates/typeAhead.html","<ul tabindex=\"-1\" class=\"typeahead dropdown-menu\" ng-show=\"$isVisible()\" role=\"select\">\n  <li role=\"presentation\" ng-repeat=\"match in $matches\" ng-class=\"{active: $index == $activeIndex}\">\n    <a role=\"menuitem\" tabindex=\"-1\" ng-click=\"$select($index, $event)\" ng-bind=\"match.label\"></a>\n  </li>\n</ul>\n");}]);

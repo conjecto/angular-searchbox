@@ -65,8 +65,8 @@
                            sb-focus >
                 </div>
             </div>
-            </div>
-            <div class="search_parameter input-facet">
+        </div>
+        <div class="search_parameter input-facet">
             <input
                    data-min-length="0"
                    type="text"
@@ -76,12 +76,12 @@
                    data-container="body"
                    data-delay="{ show: 500, hide: 0 }"
                    ng-options="element as element.label for element in sbFacetList"
-                   class="form-control" sb-typeahead ng-options-watch="sbFacetList">
-            </div>
-
+                   class="form-control" sb-typeahead ng-options-watch="sbFacetList"
+            />
         </div>
-        <div class="SB-icon SB-icon-cancel SB-cancel-search-box" title="clear search" ng-click="removeAll()"><span class="glyphicon glyphicon-remove-circle"></span></div>
+
     </div>
+    <div class="SB-icon SB-icon-cancel SB-cancel-search-box" title="clear search" ng-click="removeAll()"><span class="glyphicon glyphicon-remove-circle"></span></div>
 </div>
 <!--<pre ng-show="debug" style="margin-top: 10px;">sbResultList: {{sbResultList | json}} </pre>-->
 <!--<pre ng-show="debug">resultList (input/output): {{resultList | json}} </pre>-->
