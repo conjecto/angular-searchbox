@@ -3,8 +3,11 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
-var minifyCSS = require('gulp-minify-css');
-var templateCache = require('gulp-angular-templatecache');
+var cssmin = require('gulp-cssmin');
+var angularHtmlify = require('gulp-angular-htmlify');
+var htmlmin = require('gulp-htmlmin');
+var ngHtml2js = require('gulp-ng-html2js');
+var livereload = require('gulp-livereload');
 
 var paths = {
   scripts: ['./src/js/**/*.js'],
@@ -30,11 +33,17 @@ gulp.task('scripts', function() {
 
 gulp.task('templates', function () {
     return gulp.src(paths.templates)
-        .pipe(templateCache({
-            filename: 'angularjssearchbox.tpl.js',
-            root: 'templates/',
-            module: 'angularjssearchbox'
+        .pipe(angularHtmlify())
+        .pipe(htmlmin({
+           removeComments: true,
+           collapseWhitespace: true
         }))
+        .pipe(ngHtml2js({
+            moduleName: 'angularjssearchbox',
+            prefix: 'templates/',
+            declareModule: false
+        }))
+        .pipe(concat('angularjssearchbox.tpl.js'))
         .pipe(gulp.dest('build'))
         .pipe(uglify())
         .pipe(concat('angularjssearchbox.tpl.min.js'))
@@ -46,7 +55,7 @@ gulp.task('styles', function () {
         .pipe(sass())
         .pipe(concat('angularjssearchbox.css'))
         .pipe(gulp.dest('build'))
-        .pipe(minifyCSS())
+        .pipe(cssmin())
         .pipe(concat('angularjssearchbox.min.css'))
         .pipe(gulp.dest('build'));
 });
@@ -66,9 +75,7 @@ gulp.task('deps', function () {
 });
 
 gulp.task('serve', function(next) {
-  var connect = require('connect'),
-      server = connect();
-  server.use(connect.static(".")).listen(process.env.PORT || 9000, next);
+    livereload.listen({port: 1234});
 });
 
 // Rerun the task when a file changes

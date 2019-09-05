@@ -45,7 +45,8 @@
   text-align: center;
   min-width: 32px; }
 
-.daterangepicker .daterangepicker_start_input label, .daterangepicker .daterangepicker_end_input label {
+.daterangepicker .daterangepicker_start_input label,
+.daterangepicker .daterangepicker_end_input label {
   color: #333;
   display: block;
   font-size: 11px;
