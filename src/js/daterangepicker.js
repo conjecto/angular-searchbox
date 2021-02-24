@@ -97,8 +97,9 @@
 
         setOptions: function(options, callback) {
 
-            this.startDate = moment().startOf('day');
-            this.endDate = moment().endOf('day');
+            var lastSunday = moment().startOf('week');
+            this.startDate = lastSunday.startOf('day');
+            this.endDate = lastSunday.endOf('day');
             this.minDate = false;
             this.maxDate = false;
             this.dateLimit = false;
