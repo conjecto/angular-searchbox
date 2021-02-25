@@ -2497,8 +2497,8 @@
 
         setOptions: function(options, callback) {
 
-            this.startDate = moment().startOf('day');
-            this.endDate = moment().endOf('day');
+            this.startDate = moment().startOf('week').startOf('day'); // Set default start to last sunday morning
+            this.endDate = moment().startOf('week').endOf('day'); // Set default start to last sunday evening
             this.minDate = false;
             this.maxDate = false;
             this.dateLimit = false;
